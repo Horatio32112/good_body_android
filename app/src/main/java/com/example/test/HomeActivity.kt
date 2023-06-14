@@ -1,16 +1,13 @@
 package com.example.test
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.test.api.GetPersonalProfileApi
 import com.example.test.model.PersonalProfileData
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import retrofit2.Call

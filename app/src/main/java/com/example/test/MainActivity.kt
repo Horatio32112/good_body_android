@@ -1,5 +1,6 @@
 package com.example.test
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -55,8 +56,23 @@ class MainActivity : AppCompatActivity() {
                 password_input.setError("This block cannot be blank")
 
             } else {
+
+                TODO("connect api and get user")
+
+                TODO("if error, then put error msg")
+                TODO("if success, put account and user id into editor")
+        /**
+                val context: Context = this
                 val toast = Toast.makeText(this, "info_submitted", Toast.LENGTH_SHORT)
                 toast.show()
+
+
+
+                val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString("account", account)
+                editor.apply()
+            */
             }
         }
     }
