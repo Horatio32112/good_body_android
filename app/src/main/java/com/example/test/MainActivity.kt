@@ -5,32 +5,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.test.model.User
-import okhttp3.ConnectionPool
-import okhttp3.OkHttpClient
+import com.example.test.api.ApiSetUp
+import com.example.test.api.GetUserIdByAccountApi
+import com.example.test.model.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val to_register_button: Button = findViewById(R.id.to_register_button)
         val login_button: Button = findViewById(R.id.login_button)
         val button: Button = findViewById(R.id.button2)
-        val account_input: EditText = findViewById(R.id.account_input_field)
-        val password_input: EditText = findViewById(R.id.password_input_field)
+        val account_input: EditText = findViewById(R.id.register_account_input_field)
+        val password_input: EditText = findViewById(R.id.register_password_input_field)
 
 
         button.setOnClickListener {
@@ -49,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
             val account: String = account_input.getText().toString()
             val password: String = password_input.getText().toString()
+            val context: Context = this
             if (TextUtils.isEmpty(account)) {
                 account_input.setError("This block cannot be blank")
 
@@ -57,10 +56,49 @@ class MainActivity : AppCompatActivity() {
 
             } else {
 
-                TODO("connect api and get user")
 
-                TODO("if error, then put error msg")
-                TODO("if success, put account and user id into editor")
+                val okHttpClient = ApiSetUp.createOkHttpClient()
+                var retrofitBuilder1 = ApiSetUp.createRetrofit<GetUserIdByAccountApi>(okHttpClient)
+                var retrofitData1 = retrofitBuilder1.get_id(account)
+                retrofitData1.enqueue(object : Callback<UserId> {
+                    override fun onResponse(
+                        call: Call<UserId>,
+                        response: Response<UserId>
+                    ) {
+                        Log.d("header ", "test ${Thread.currentThread()}")
+
+                        if (response.isSuccessful) {
+                            //API回傳結果
+                            var id : Int? = response.body()?.id
+
+                            val toast = Toast.makeText(context, "info_submitted", Toast.LENGTH_SHORT)
+                            toast.show()
+
+                            val sharedPreferences = context.getSharedPreferences("account_info", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("account", account)
+                            id?.let { it1 -> editor.putInt("user_id", it1) }
+                            editor.apply()
+
+                            val intent = Intent(context, HomeActivity::class.java)
+                            context.startActivity(intent)
+
+                            Log.d("header ", "user exists, id = ${id}")
+                            Log.d("header ", "${account} logged in.")
+
+                        } else {
+                            Log.d("header ", "user not exist or something went wrong")
+                            // 處理 API 錯誤回應
+                        }
+                    }
+                    override fun onFailure(call: Call<UserId>, t: Throwable) {
+                        Log.d("header ", "GetUserIdByAccountApi call failed")
+                    }
+
+                })
+
+
+
         /**
                 val context: Context = this
                 val toast = Toast.makeText(this, "info_submitted", Toast.LENGTH_SHORT)
@@ -76,6 +114,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
 
 

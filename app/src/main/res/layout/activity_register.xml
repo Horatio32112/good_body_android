@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/password_input_field"
+        android:id="@+id/register_password_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginStart="24dp"
@@ -32,101 +32,101 @@
         android:inputType="textPassword"
         android:textColorHint="#8D6E63"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_account_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/email_input_field"
+        android:id="@+id/register_email_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="email"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_password_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/phone_number_input_field"
+        android:id="@+id/register_phone_number_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="phone number"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_email_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/age_input_field"
+        android:id="@+id/register_age_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="age"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/height_input_field"
+        android:id="@+id/register_height_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="height"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/age_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_age_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/weight_input_field"
+        android:id="@+id/register_weight_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="weight"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/height_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_height_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/gender_input_field"
+        android:id="@+id/register_gender_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="gender"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weight_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_weight_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/name_input_field"
+        android:id="@+id/register_name_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginBottom="30dp"
         android:ems="10"
         android:hint="name"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColorHint="#8D6E63"
         app:layout_constraintBottom_toTopOf="@+id/register_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +134,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/account_input_field"
+        android:id="@+id/register_account_input_field"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginStart="24dp"
@@ -152,13 +152,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="Register"
-        app:layout_constraintBottom_toTopOf="@+id/to_login_button"
+        app:layout_constraintBottom_toTopOf="@+id/register_to_login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/to_login_button"
+        android:id="@+id/register_to_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"

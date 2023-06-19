@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/BackHomeButton"
+        android:id="@+id/get_my_personal_profile_BackHomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -14,10 +14,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UpdateProfileButton" />
+        app:layout_constraintTop_toBottomOf="@+id/get_my_personal_profile_UpdateProfileButton" />
 
     <EditText
-        android:id="@+id/GenderInputField"
+        android:id="@+id/get_my_personal_profile_GenderInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -38,10 +38,10 @@
         android:layout_marginTop="20dp"
         android:text="Gender"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AgeInputField2" />
+        app:layout_constraintTop_toBottomOf="@+id/get_my_personal_profile_AgeInputField" />
 
     <EditText
-        android:id="@+id/AgeInputField2"
+        android:id="@+id/get_my_personal_profile_AgeInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -60,10 +60,10 @@
         android:layout_marginTop="20dp"
         android:text="Age"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/WeightInputField" />
+        app:layout_constraintTop_toBottomOf="@+id/get_my_personal_profile_WeightInputField" />
 
     <EditText
-        android:id="@+id/WeightInputField"
+        android:id="@+id/get_my_personal_profile_WeightInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -82,10 +82,10 @@
         android:layout_marginTop="20dp"
         android:text="Weight"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/HeightInputField" />
+        app:layout_constraintTop_toBottomOf="@+id/get_my_personal_profile_HeightInputField" />
 
     <EditText
-        android:id="@+id/HeightInputField"
+        android:id="@+id/get_my_personal_profile_HeightInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -107,12 +107,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/UpdateProfileButton"
+        android:id="@+id/get_my_personal_profile_UpdateProfileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/GenderInputField" />
+        app:layout_constraintTop_toBottomOf="@+id/get_my_personal_profile_GenderInputField" />
 </androidx.constraintlayout.widget.ConstraintLayout>

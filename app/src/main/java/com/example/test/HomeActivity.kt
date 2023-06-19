@@ -1,12 +1,23 @@
 package com.example.test
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.test.R
 import com.example.test.api.GetPersonalProfileApi
+import com.example.test.api.LoggingInterceptor
+import com.example.test.databinding.ActivityMainBinding
 import com.example.test.model.PersonalProfileData
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
@@ -18,66 +29,43 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class HomeActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        val submit_button: Button = findViewById(R.id.button)
-        val account_input: EditText = findViewById(R.id.account_field)
 
-        submit_button.setOnClickListener {
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-            val account: String = account_input.getText().toString()
-            api_connect(account)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val context = this
+        return when (item.itemId) {
+            R.id.menu_MyProfile -> {
+                val intent = Intent(context, RegisterActivity::class.java)
+                context.startActivity(intent)
+                println("Call")
+                true
+            }
+            R.id.menu_MySetsRecords -> {
+                println("Share")
+                true
+            }
+            R.id.menu_MyTimeRecords -> {
+                println("Share")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
     }
 
-    private fun api_connect(account:String) {
 
 
-        val okHttpClient = OkHttpClient.Builder()
-            .addNetworkInterceptor(LoggingInterceptor())
-            .connectTimeout(60L, TimeUnit.SECONDS)
-            .readTimeout(60L, TimeUnit.SECONDS)
-            .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-            .build()
-        val retrofitBuilder = Retrofit.Builder()
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://10.0.2.2:3000")
-            .build()
-            .create(GetPersonalProfileApi::class.java)
 
-        val inputMap = mapOf("account" to account)
-        val retrofitData = retrofitBuilder.get_profile(account)
-        retrofitData.enqueue(object : Callback<PersonalProfileData> {
-            override fun onResponse(
-                call: Call<PersonalProfileData>,
-                response: Response<PersonalProfileData>
-            ) {
-                Log.d("header ", "test ${Thread.currentThread()}")
 
-                if (response.isSuccessful) {
-                    //API回傳結果
-                    var profile : PersonalProfileData? = response.body()
 
-                    // 在此處理 API 回應
-                    val textView: TextView = findViewById<TextView>(R.id.return_field)
-                    textView.text = profile?.height.toString()
 
-                } else {
-                    val textView: TextView = findViewById<TextView>(R.id.return_field)
-                    textView.text="?"
-                    // 處理 API 錯誤回應
-                }
-            }
-
-            override fun onFailure(call: Call<PersonalProfileData>, t: Throwable) {
-                val textView: TextView = findViewById<TextView>(R.id.return_field)
-                textView.text = t.toString()
-
-            }
-
-        })
-    }
 }

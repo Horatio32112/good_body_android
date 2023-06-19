@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/password_input_field"
+        android:id="@+id/register_password_input_field"
         android:layout_width="223dp"
         android:layout_height="74dp"
         android:layout_marginTop="16dp"
@@ -16,11 +16,11 @@
         android:textColorHint="#8D6E63"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_account_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/account_input_field"
+        android:id="@+id/register_account_input_field"
         android:layout_width="211dp"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
@@ -51,7 +51,7 @@
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/register_password_input_field"
         tools:ignore="HardcodedText" />
     <Button
         android:id="@+id/to_register_button"
