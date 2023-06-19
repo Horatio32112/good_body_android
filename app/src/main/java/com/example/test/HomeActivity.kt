@@ -45,17 +45,17 @@ class HomeActivity : AppCompatActivity() {
         val context = this
         return when (item.itemId) {
             R.id.menu_MyProfile -> {
-                val intent = Intent(context, RegisterActivity::class.java)
+                val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
-                println("Call")
+
                 true
             }
             R.id.menu_MySetsRecords -> {
-                println("Share")
+
                 true
             }
             R.id.menu_MyTimeRecords -> {
-                println("Share")
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
