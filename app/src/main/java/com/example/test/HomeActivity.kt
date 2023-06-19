@@ -2,31 +2,10 @@ package com.example.test
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.test.R
-import com.example.test.api.GetPersonalProfileApi
-import com.example.test.api.LoggingInterceptor
-import com.example.test.databinding.ActivityMainBinding
-import com.example.test.model.PersonalProfileData
-import okhttp3.ConnectionPool
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import com.example.test.feature.profile.view.MyPersonalProfileActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -45,17 +24,16 @@ class HomeActivity : AppCompatActivity() {
         val context = this
         return when (item.itemId) {
             R.id.menu_MyProfile -> {
-                val intent = Intent(context, RegisterActivity::class.java)
+                val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
-                println("Call")
                 true
             }
             R.id.menu_MySetsRecords -> {
-                println("Share")
+                TODO("to MySetsRecords")
                 true
             }
             R.id.menu_MyTimeRecords -> {
-                println("Share")
+                TODO("to MyTimeRecords")
                 true
             }
             else -> super.onOptionsItemSelected(item)
