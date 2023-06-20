@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.api.ApiSetUp
+import com.example.test.api.ApiV1
 import com.example.test.api.GetPersonalProfileApi
 import com.example.test.api.UpdatePersonalProfileApi
 import com.example.test.model.PersonalProfileData
@@ -43,7 +44,7 @@ class MyPersonalProfileActivity : AppCompatActivity(){
         }
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        var retrofitBuilder1 = ApiSetUp.createRetrofit<GetPersonalProfileApi>(okHttpClient)
+        var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
         var retrofitData1 = retrofitBuilder1.get_profile(account.toString())
         retrofitData1.enqueue(object : Callback<PersonalProfileData> {
             override fun onResponse(
@@ -71,7 +72,7 @@ class MyPersonalProfileActivity : AppCompatActivity(){
 
         update_button.setOnClickListener {
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<UpdatePersonalProfileApi>(okHttpClient)
+            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
             var retrofitData1 = retrofitBuilder1.update_profile(account.toString(),height_field.text.toString().toInt(),weight_field.text.toString().toInt(),age_field.text.toString().toInt(),gender_field.text.toString())
             retrofitData1.enqueue(object : Callback<PersonalProfileData> {
                 override fun onResponse(

@@ -11,10 +11,6 @@ import retrofit2.http.POST
 
 
 interface GetUserIdByAccountApi {
-    @FormUrlEncoded
-    @POST("/v1/get_id")
-    fun get_id(
-        @Field("account") account: String
-    ): Call<UserId>
+
 }
 

@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.api.ApiSetUp
+import com.example.test.api.ApiV1
 import com.example.test.api.GetUserIdByAccountApi
 import com.example.test.model.UserId
 import retrofit2.Call
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
 
                 val okHttpClient = ApiSetUp.createOkHttpClient()
-                var retrofitBuilder1 = ApiSetUp.createRetrofit<GetUserIdByAccountApi>(okHttpClient)
+                var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
                 var retrofitData1 = retrofitBuilder1.get_id(account)
                 retrofitData1.enqueue(object : Callback<UserId> {
                     override fun onResponse(

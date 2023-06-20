@@ -8,9 +8,5 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface GetTimesRecordsApi {
-    @FormUrlEncoded
-    @POST("/v1/record_times_get")
-    fun get_times_records(
-        @Field("account") account: String
-    ): Call<List<TimesRecord>>
+
 }

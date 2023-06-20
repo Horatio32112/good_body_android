@@ -51,7 +51,8 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_MySetsRecords -> {
-
+                val intent = Intent(context, MySetsRecordsActivity::class.java)
+                context.startActivity(intent)
                 true
             }
             R.id.menu_MyTimeRecords -> {

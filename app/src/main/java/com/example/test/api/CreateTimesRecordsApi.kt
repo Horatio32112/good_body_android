@@ -8,13 +8,5 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface CreateTimesRecordsApi {
-    @FormUrlEncoded
-    @POST("/v1/record_time_create")
-    fun create_time_records(
-        @Field("user_id") account: Int,
-        @Field("contents") contents: String,
-        @Field("duration") duration: Int,
-        @Field("distance") distance: Float
 
-    ): Call<OperationMsg>
 }

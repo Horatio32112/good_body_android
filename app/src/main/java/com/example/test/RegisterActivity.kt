@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.api.ApiSetUp
+import com.example.test.api.ApiV1
 import com.example.test.api.GetUserIdByAccountApi
 import com.example.test.api.RegisterAccountApi
 import com.example.test.model.OperationMsg
@@ -65,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
                 TODO("warn about empty blanks")
             }else{
                 val okHttpClient = ApiSetUp.createOkHttpClient()
-                var retrofitBuilder1 = ApiSetUp.createRetrofit<RegisterAccountApi>(okHttpClient)
+                var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
                 var retrofitData1 = retrofitBuilder1.register_account(email,password,account,phone_number,name,age,height,weight,gender)
                 retrofitData1.enqueue(object : Callback<OperationMsg> {
                     override fun onResponse(
@@ -79,7 +80,7 @@ class RegisterActivity : AppCompatActivity() {
                             val toast = Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
                             toast.show()
 
-                            var retrofitBuilder2 = ApiSetUp.createRetrofit<GetUserIdByAccountApi>(okHttpClient)
+                            var retrofitBuilder2 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
                             var retrofitData2 = retrofitBuilder2.get_id(account)
                             retrofitData2.enqueue(object : Callback<UserId> {
                                 override fun onResponse(

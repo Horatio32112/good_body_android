@@ -10,11 +10,7 @@ import retrofit2.http.POST
 
 
 interface GetPersonalProfileApi {
-    @FormUrlEncoded
-    @POST("/v1/get_personal_profile")
-    fun get_profile(
-        @Field("account") account: String
-        ): Call<PersonalProfileData>
+
 }
 
 
