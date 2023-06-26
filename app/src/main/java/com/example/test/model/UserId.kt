@@ -1,5 +1,5 @@
 package com.example.test.model
 
 data class UserId(
-    val id: Int
+    val user_id: Int
 )

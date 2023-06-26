@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
-import com.example.test.api.GetPersonalProfileApi
-import com.example.test.api.UpdatePersonalProfileApi
 import com.example.test.model.PersonalProfileData
 import retrofit2.Call
 import retrofit2.Callback

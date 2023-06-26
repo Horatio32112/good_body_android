@@ -2,6 +2,7 @@ package com.example.test.api
 
 import com.example.test.model.OperationMsg
 import com.example.test.model.PersonalProfileData
+import com.example.test.model.RecommendFollowers
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 import com.example.test.model.UserId
@@ -95,4 +96,9 @@ interface ApiV1 {
         @Field("age") age: Int,
         @Field("gender") gender: String
     ): Call<PersonalProfileData>
+    @FormUrlEncoded
+    @POST("/v1/recommend_follower")
+    fun get_recommend_followers(
+        @Field("user_id") user_id: String
+    ): Call<RecommendFollowers>
 }

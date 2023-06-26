@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.test.databinding.FragmentFollowRecommendBinding
-
+/**
 private var _binding: FragmentFollowRecommendBinding? = null
 private val binding get() = _binding!!
 private lateinit var recyclerView: RecyclerView
 private var isLinearLayoutManager = true
-
+*/
 class FollowRecommendFragment : Fragment() {
-
+/**
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -77,4 +77,5 @@ class FollowRecommendFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    */
 }

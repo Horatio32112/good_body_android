@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
-import com.example.test.api.GetUserIdByAccountApi
 import com.example.test.model.UserId
 import retrofit2.Call
 import retrofit2.Callback
@@ -70,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
                         if (response.isSuccessful) {
                             //API回傳結果
-                            var id : Int? = response.body()?.id
+                            var user_id : Int? = response.body()?.user_id
 
                             val toast = Toast.makeText(context, "info_submitted", Toast.LENGTH_SHORT)
                             toast.show()
@@ -78,13 +77,14 @@ class MainActivity : AppCompatActivity() {
                             val sharedPreferences = context.getSharedPreferences("account_info", Context.MODE_PRIVATE)
                             val editor = sharedPreferences.edit()
                             editor.putString("account", account)
-                            id?.let { it1 -> editor.putInt("user_id", it1) }
+
+                            user_id?.let { it1 -> editor.putInt("user_id", it1) }
                             editor.apply()
 
                             val intent = Intent(context, HomeActivity::class.java)
                             context.startActivity(intent)
 
-                            Log.d("header ", "user exists, id = ${id}")
+                            Log.d("header ", "user exists, id = ${user_id}")
                             Log.d("header ", "${account} logged in.")
 
                         } else {
