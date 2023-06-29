@@ -129,7 +129,7 @@ interface ApiV1 {
     @PUT("/v1/record_time_update")
     fun update_time_records(
         @Field("id") id: Int?,
-        @Field("content") content: String,
+        @Field("contents") contents: String,
         @Field("duration") duration: Int,
         @Field("distance") distance: Float
     ): Call<OperationMsg>

@@ -10,10 +10,8 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Adapter.SetsRecordItemAdapter
 import com.example.test.Adapter.TimeRecordItemAdapter
 import com.example.test.data.Datasource
-import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 import kotlinx.coroutines.launch
 
@@ -25,13 +23,17 @@ class MyTimeRecordsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_my_time_records)
 
         val homeBtn: Button =findViewById(R.id.my_time_records_HomeBtn)
-
+        val AddBtn: Button =findViewById(R.id.my_time_records_AddRecordBtn)
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
         val context = this
         var myTimeRecords :List<TimesRecord>?=null
-        val recyclerView = findViewById<RecyclerView>(R.id.my_time_records_Recycle)
+        val recyclerView = findViewById<RecyclerView>(R.id.my_time_records_RecycleView)
 
+        AddBtn.setOnClickListener {
+            val intent = Intent(context, AddTimeRecordsActivity::class.java)
+            context.startActivity(intent)
+        }
 
         homeBtn.setOnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
@@ -68,7 +70,7 @@ class MyTimeRecordsActivity : AppCompatActivity() {
             }
 
             R.id.menu_MySetsRecords -> {
-                val intent = Intent(context, MyTimeRecordsActivity::class.java)
+                val intent = Intent(context, MySetsRecordsActivity::class.java)
                 context.startActivity(intent)
                 true
             }

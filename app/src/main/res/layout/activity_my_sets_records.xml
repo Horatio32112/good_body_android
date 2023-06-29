@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MySetsRecordsActivity">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_sets_records_RecyclerView"
         android:layout_width="match_parent"

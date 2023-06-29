@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.http2.Http2Reader
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -20,6 +21,10 @@ class ApiSetUp {
                 .readTimeout(60L, TimeUnit.SECONDS)
                 .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
                 .build()
+
+            /*HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }*/
         }
 
         internal class LoggingInterceptor : Interceptor {

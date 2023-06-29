@@ -7,12 +7,13 @@
     tools:context=".MySetsRecordsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_time_records_Recycle"
-        android:layout_width="0dp"
+        android:id="@+id/my_time_records_RecycleView"
+        android:layout_width="match_parent"
         android:layout_height="550dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:scrollbars="vertical"
+        app:layoutManager="LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <Button
         android:id="@+id/my_time_records_AddRecordBtn"
@@ -22,7 +23,7 @@
         android:text="Add Record"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_time_records_Recycle" />
+        app:layout_constraintTop_toBottomOf="@+id/my_time_records_RecycleView" />
 
     <Button
         android:id="@+id/my_time_records_HomeBtn"

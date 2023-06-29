@@ -60,8 +60,6 @@ class TimeRecordItemAdapter(private val context: Context, private val dataset: L
 
                     if (response.isSuccessful) {
                         //API回傳結果
-
-
                         Log.d("header ", "record id ${record_id} is updated")
 
                     } else {
