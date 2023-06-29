@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/update_time_ContentInputField"
+        android:id="@+id/add_sets_ContentInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <EditText
-        android:id="@+id/update_time_TimesInputField"
+        android:id="@+id/add_sets_SetsInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -52,7 +52,7 @@
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <EditText
-        android:id="@+id/update_time_RepsInputField"
+        android:id="@+id/add_sets_RepsInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -64,7 +64,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <EditText
-        android:id="@+id/update_time_DistanceInputField"
+        android:id="@+id/add_sets_WeightInputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -85,7 +85,7 @@
         android:text="Sets"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_time_ContentInputField" />
+        app:layout_constraintTop_toBottomOf="@+id/add_sets_ContentInputField" />
 
     <TextView
         android:id="@+id/textView9"
@@ -97,7 +97,7 @@
         android:text="Reps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_time_TimesInputField" />
+        app:layout_constraintTop_toBottomOf="@+id/add_sets_SetsInputField" />
 
     <TextView
         android:id="@+id/textView10"
@@ -107,10 +107,10 @@
         android:layout_marginTop="20dp"
         android:text="Weight(kg)"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_time_RepsInputField" />
+        app:layout_constraintTop_toBottomOf="@+id/add_sets_RepsInputField" />
 
     <Button
-        android:id="@+id/update_time_CancelButton"
+        android:id="@+id/add_sets_CancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -120,7 +120,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/update_time_CreateRecordButton"
+        android:id="@+id/add_sets_CreateRecordBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"

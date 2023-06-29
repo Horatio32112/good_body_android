@@ -6,32 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".MySetsRecordsActivity">
 
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_sets_records_RecyclerView"
-        android:layout_width="match_parent"
+        android:id="@+id/my_time_records_Recycle"
+        android:layout_width="0dp"
         android:layout_height="550dp"
-        android:scrollbars="vertical"
-        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/my_sets_records_HomeBtn"
+        android:id="@+id/my_time_records_AddRecordBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:text="To home page"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_sets_records_RecyclerView" />
-
-    <Button
-        android:id="@+id/my_sets_records_AddRecordBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:text="Add Record"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_sets_records_RecyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/my_time_records_Recycle" />
+
+    <Button
+        android:id="@+id/my_time_records_HomeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="To Home Page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_time_records_AddRecordBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sets_record_list_item"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.MaterialComponents.DayNight"
+    android:layout_margin="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="60dp"
+            android:layout_height="22dp"
+            android:text="Contents"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="60dp"
+            android:layout_height="22dp"
+            android:text="Weight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_record_ContentInput" />
+
+        <EditText
+            android:id="@+id/set_record_ContentInput"
+            android:layout_width="175dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+        <EditText
+            android:id="@+id/set_record_WeightInput"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:text="Sets"
+            app:layout_constraintStart_toEndOf="@+id/set_record_ContentInput"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/set_record_SetsInput"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name"
+            app:layout_constraintStart_toEndOf="@+id/set_record_ContentInput"
+            app:layout_constraintTop_toBottomOf="@+id/textView_duration" />
+
+        <EditText
+            android:id="@+id/set_record_RepsInput"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/set_record_SetsInput"
+            app:layout_constraintTop_toBottomOf="@+id/textView_distance" />
+
+        <TextView
+            android:id="@+id/textView_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:text="Reps"
+            app:layout_constraintStart_toEndOf="@+id/set_record_SetsInput"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/set_record_UpdateBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update This Record"
+            app:layout_constraintBottom_toBottomOf="@+id/set_record_WeightInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_record_RepsInput" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

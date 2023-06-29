@@ -5,5 +5,6 @@ data class SetsRecord(
     val contents: String,
     val sets:Int,
     val reps:Int,
-    val weight:Int
+    val weight:Int,
+    val record_id:Int
 )

@@ -36,6 +36,24 @@
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
+        <activity
+            android:name=".MyTimeRecordsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            />
+        <activity
+            android:name=".AddSetsRecordsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            />
+        <activity
+            android:name=".AddTimeRecordsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            />
 
         <activity
             android:name=".RegisterActivity"

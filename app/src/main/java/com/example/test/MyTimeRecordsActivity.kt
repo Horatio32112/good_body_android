@@ -11,43 +11,42 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.Adapter.SetsRecordItemAdapter
+import com.example.test.Adapter.TimeRecordItemAdapter
 import com.example.test.data.Datasource
 import com.example.test.model.SetsRecord
+import com.example.test.model.TimesRecord
 import kotlinx.coroutines.launch
 
-class MySetsRecordsActivity : AppCompatActivity() {
+class MyTimeRecordsActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_sets_records)
-        val AddBtn: Button =findViewById(R.id.my_sets_records_AddRecordBtn)
-        val homeBtn: Button =findViewById(R.id.my_sets_records_HomeBtn)
+        setContentView(R.layout.activity_my_time_records)
+
+        val homeBtn: Button =findViewById(R.id.my_time_records_HomeBtn)
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
         val context = this
-        var mySetsRecords :List<SetsRecord>?=null
-        val recyclerView = findViewById<RecyclerView>(R.id.my_sets_records_RecyclerView)
+        var myTimeRecords :List<TimesRecord>?=null
+        val recyclerView = findViewById<RecyclerView>(R.id.my_time_records_Recycle)
 
-        AddBtn.setOnClickListener {
-            val intent = Intent(context, AddSetsRecordsActivity::class.java)
-            context.startActivity(intent)
-        }
+
         homeBtn.setOnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
             context.startActivity(intent)
         }
 
 
-        fun convert_data (data:List <SetsRecord>?){
-            mySetsRecords=data
+        fun convert_data (data:List <TimesRecord>?){
+           myTimeRecords=data
         }
         lifecycleScope.launch {
-            val data =  Datasource().loadSetsRecords(account.toString())
+            val data =  Datasource().loadTimesRecords(account.toString())
             convert_data(data)
-            Log.d("header ", "${mySetsRecords}+test1")
-            recyclerView.adapter = SetsRecordItemAdapter(context, mySetsRecords)
+            Log.d("header ", "${myTimeRecords}+test1")
+            recyclerView.adapter = TimeRecordItemAdapter(context, myTimeRecords)
             recyclerView.setHasFixedSize(true)
         }
 
@@ -69,7 +68,7 @@ class MySetsRecordsActivity : AppCompatActivity() {
             }
 
             R.id.menu_MySetsRecords -> {
-                val intent = Intent(context, MySetsRecordsActivity::class.java)
+                val intent = Intent(context, MyTimeRecordsActivity::class.java)
                 context.startActivity(intent)
                 true
             }

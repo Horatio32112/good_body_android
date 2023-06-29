@@ -102,7 +102,8 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_MyTimeRecords -> {
-
+                val intent = Intent(context, MyTimeRecordsActivity::class.java)
+                context.startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

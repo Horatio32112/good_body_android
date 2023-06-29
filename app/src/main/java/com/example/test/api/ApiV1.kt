@@ -11,6 +11,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface ApiV1 {
 
@@ -29,8 +30,8 @@ interface ApiV1 {
     @FormUrlEncoded
     @POST("/v1/record_sets_create")
     fun create_sets_records(
-        @Field("user_id") account: Int,
-        @Field("contents") contents: String,
+        @Field("user_id") user_id: Int,
+        @Field("content") content: String,
         @Field("set") set: Int,
         @Field("rep") rep: Int,
         @Field("weight") weight: Float
@@ -102,4 +103,34 @@ interface ApiV1 {
         @Field("user_id") user_id: String
     ): Call<RecommendFollowers>
 
+    @FormUrlEncoded
+    @POST("/v1/recommend_sets_txt")
+    fun get_recommend_sets_records(
+        @Field("user_id") user_id: String
+    ): Call<List<SetsRecord>>
+
+    @FormUrlEncoded
+    @POST("/v1/recommend_times_txt")
+    fun get_recommend_times_records(
+        @Field("user_id") user_id: String
+    ): Call<List<TimesRecord>>
+
+    @FormUrlEncoded
+    @PUT("/v1/record_sets_update")
+    fun update_sets_records(
+        @Field("id") id: Int?,
+        @Field("content") content: String,
+        @Field("set") set: Int,
+        @Field("rep") rep: Int,
+        @Field("weight") weight: Float
+    ): Call<OperationMsg>
+
+    @FormUrlEncoded
+    @PUT("/v1/record_time_update")
+    fun update_time_records(
+        @Field("id") id: Int?,
+        @Field("content") content: String,
+        @Field("duration") duration: Int,
+        @Field("distance") distance: Float
+    ): Call<OperationMsg>
 }
