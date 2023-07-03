@@ -106,13 +106,13 @@ interface ApiV1 {
     @FormUrlEncoded
     @POST("/v1/recommend_sets_txt")
     fun get_recommend_sets_records(
-        @Field("user_id") user_id: String
+        @Field("user_id") user_id: Int
     ): Call<List<SetsRecord>>
 
     @FormUrlEncoded
     @POST("/v1/recommend_times_txt")
     fun get_recommend_times_records(
-        @Field("user_id") user_id: String
+        @Field("user_id") user_id: Int
     ): Call<List<TimesRecord>>
 
     @FormUrlEncoded
@@ -132,5 +132,25 @@ interface ApiV1 {
         @Field("contents") contents: String,
         @Field("duration") duration: Int,
         @Field("distance") distance: Float
+    ): Call<OperationMsg>
+
+    @FormUrlEncoded
+    @POST("/v1/check_follow")
+    fun check_follow(
+        @Field("subject_user_account") subject_user_account: String?,
+        @Field("object_user_account") object_user_account: String
+    ): Call<OperationMsg>
+
+    @FormUrlEncoded
+    @POST("/v1/follow")
+    fun follow(
+        @Field("subject_user_account") subject_user_account: String?,
+        @Field("object_user_account") object_user_account: String
+    ): Call<OperationMsg>
+    @FormUrlEncoded
+    @POST("/v1/unfollow")
+    fun unfollow(
+        @Field("subject_user_account") subject_user_account: String?,
+        @Field("object_user_account") object_user_account: String
     ): Call<OperationMsg>
 }

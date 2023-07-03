@@ -5,6 +5,8 @@ data class TimesRecord(
     val contents: String,
     val duration:Int,
     val distance:Float,
-    val record_id:Int
+    val record_id:Int,
+    val account:String,
+    val created_at:String
 
 )

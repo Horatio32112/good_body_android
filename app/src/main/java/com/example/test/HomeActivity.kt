@@ -9,9 +9,17 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import com.example.test.Adapter.RecommendRecordItemAdapter
+import com.example.test.Adapter.SetsRecordItemAdapter
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
+import com.example.test.data.Datasource
 import com.example.test.model.RecommendFollowers
+import com.example.test.model.SetsRecord
+import com.example.test.model.TimesRecord
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +42,15 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val user_id = sharedPreferences.getInt("user_id", -1)
 
+        var RecommendedSetsRecords :List<SetsRecord>?=null
+        var RecommendedTimeRecords :List<TimesRecord>?=null
+        var RecommendedRecords :List<Any?>?=null
+        val recyclerView = findViewById<RecyclerView>(R.id.home_RecycleView)
+
+
+
+
+
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
         var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
@@ -53,18 +70,20 @@ class HomeActivity : AppCompatActivity() {
                     recommend_account_text2.text=response.account2
                     recommend_account_text3.text=response.account3
                     check_out_button1.setOnClickListener{
-                        val intent = Intent(context, HomeActivity::class.java)
+                        val intent = Intent(context, UserProfileActivity::class.java)
+                        intent.putExtra("object_user_account", recommend_account_text1.text)
                         context.startActivity(intent)
                     }
                     check_out_button2.setOnClickListener{
-                        val intent = Intent(context, HomeActivity::class.java)
+                        val intent = Intent(context, UserProfileActivity::class.java)
+                        intent.putExtra("object_user_account", recommend_account_text2.text)
                         context.startActivity(intent)
                     }
                     check_out_button3.setOnClickListener{
-                        val intent = Intent(context, HomeActivity::class.java)
+                        val intent = Intent(context, UserProfileActivity::class.java)
+                        intent.putExtra("object_user_account", recommend_account_text3.text)
                         context.startActivity(intent)
                     }
-
 
                     Log.d("header ", "Got recommend followers for id=${user_id}")
 
@@ -80,6 +99,20 @@ class HomeActivity : AppCompatActivity() {
             }
 
         })
+
+        lifecycleScope.launch {
+            val Setsdata =  Datasource().RecommedSetsRecords(user_id)
+            val Timedata =  Datasource().RecommedTimesRecords(user_id)
+
+            RecommendedSetsRecords=Setsdata
+            RecommendedTimeRecords=Timedata
+            RecommendedRecords = RecommendedSetsRecords
+            for(timerecord in RecommendedTimeRecords!!){
+                RecommendedRecords = RecommendedRecords?.plus(timerecord)
+            }
+            recyclerView.adapter = RecommendRecordItemAdapter(context, RecommendedRecords)
+            recyclerView.setHasFixedSize(true)
+        }
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -117,3 +150,5 @@ class HomeActivity : AppCompatActivity() {
 
 
 }
+
+

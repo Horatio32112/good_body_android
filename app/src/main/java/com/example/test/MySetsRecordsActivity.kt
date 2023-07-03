@@ -46,7 +46,6 @@ class MySetsRecordsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val data =  Datasource().loadSetsRecords(account.toString())
             convert_data(data)
-            Log.d("header ", "${mySetsRecords}+test1")
             recyclerView.adapter = SetsRecordItemAdapter(context, mySetsRecords)
             recyclerView.setHasFixedSize(true)
         }
