@@ -1,21 +1,14 @@
 package com.example.test.Adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
-import com.example.test.api.ApiSetUp
-import com.example.test.api.ApiV1
-import com.example.test.model.OperationMsg
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RecommendRecordItemAdapter(private val context: Context, private val dataset: List<Any?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     class SetsViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {

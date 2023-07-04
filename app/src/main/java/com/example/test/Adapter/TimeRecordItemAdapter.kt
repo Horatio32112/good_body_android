@@ -11,7 +11,6 @@ import com.example.test.R
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
-import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 import retrofit2.Call
 import retrofit2.Callback

@@ -10,16 +10,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Adapter.SetsRecordItemAdapter
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
-import com.example.test.data.Datasource
 import com.example.test.model.OperationMsg
-import com.example.test.model.SetsRecord
-import com.example.test.model.UserId
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
