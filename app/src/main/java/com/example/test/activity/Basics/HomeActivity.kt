@@ -1,4 +1,4 @@
-package com.example.test
+package com.example.test.activity.Basics
 
 import android.content.Context
 import android.content.Intent
@@ -12,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.Adapter.RecommendRecordItemAdapter
+import com.example.test.R
+import com.example.test.activity.InteractionOfUsers.FindUserActivity
+import com.example.test.activity.InteractionOfUsers.UserProfileActivity
+import com.example.test.activity.MyRecords.MySetsRecordsActivity
+import com.example.test.activity.MyRecords.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource

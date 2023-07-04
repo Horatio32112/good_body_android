@@ -1,4 +1,4 @@
-package com.example.test
+package com.example.test.activity.Basics
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.test.R
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
