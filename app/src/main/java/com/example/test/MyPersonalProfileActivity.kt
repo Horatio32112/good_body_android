@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -106,6 +108,43 @@ class MyPersonalProfileActivity : AppCompatActivity(){
 
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val context = this
+        return when (item.itemId) {
+            R.id.menu_FindUser -> {
+                val intent = Intent(context, FindUserActivity::class.java)
+                context.startActivity(intent)
+
+                true
+            }
+            R.id.menu_MyProfile -> {
+                val intent = Intent(context, MyPersonalProfileActivity::class.java)
+                context.startActivity(intent)
+
+                true
+            }
+
+            R.id.menu_MySetsRecords -> {
+                val intent = Intent(context, MySetsRecordsActivity::class.java)
+                context.startActivity(intent)
+                true
+            }
+
+            R.id.menu_MyTimeRecords -> {
+                val intent = Intent(context, MyTimeRecordsActivity::class.java)
+                context.startActivity(intent)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

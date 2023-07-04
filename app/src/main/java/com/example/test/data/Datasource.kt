@@ -195,7 +195,7 @@ class Datasource {
                         var response = response.body()
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "${SubjectUserAccount} followed ${ObjectUserAccount}")
+                        Log.d("header ", "${SubjectUserAccount} unfollowed ${ObjectUserAccount}")
 
                     } else {
                         Log.d("header ", "${SubjectUserAccount} failed to follow ${ObjectUserAccount}")

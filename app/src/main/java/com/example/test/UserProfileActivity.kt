@@ -55,20 +55,27 @@ class UserProfileActivity : AppCompatActivity(){
             if(FollowBtnStatus=="following") {
                 follow_button.text="Unfollow"
                 follow_button.setOnClickListener{
+
                     lifecycleScope.launch {
                         Datasource().UnFollow(account,ObjectUserAccount)
-                        follow_button.text="Follow"
                         FollowBtnStatus="not_following"
+                        SetUpFollowBtn()
+                        Log.d("header ", "status changed")
                     }
+
                 }
             }else if(FollowBtnStatus=="not_following"){
                 follow_button.text="Follow"
                 follow_button.setOnClickListener{
+
                     lifecycleScope.launch {
                         Datasource().Follow(account,ObjectUserAccount)
-                        follow_button.text="Unfollow"
                         FollowBtnStatus="following"
+                        SetUpFollowBtn()
+                        Log.d("header ", "status changed")
                     }
+
+
                 }
             }
         }
@@ -130,6 +137,12 @@ class UserProfileActivity : AppCompatActivity(){
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val context = this
         return when (item.itemId) {
+            R.id.menu_FindUser -> {
+                val intent = Intent(context, FindUserActivity::class.java)
+                context.startActivity(intent)
+
+                true
+            }
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)

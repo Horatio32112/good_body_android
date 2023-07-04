@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/menu_FindUser"
+        android:title="Find User" />
     <item android:id="@+id/menu_MyProfile"
         android:title="My Profile"
         app:showAsAction="never" />

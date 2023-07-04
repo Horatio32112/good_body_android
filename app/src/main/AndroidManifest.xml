@@ -54,6 +54,13 @@
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
+
+        <activity
+            android:name=".FindUserActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            />
         <activity
             android:name=".UserProfileActivity"
             android:exported="false"

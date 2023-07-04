@@ -153,4 +153,10 @@ interface ApiV1 {
         @Field("subject_user_account") subject_user_account: String?,
         @Field("object_user_account") object_user_account: String
     ): Call<OperationMsg>
+
+    @FormUrlEncoded
+    @POST("/v1/check_user_existence")
+    fun check_user_existence(
+        @Field("account") account: String
+    ): Call<OperationMsg>
 }

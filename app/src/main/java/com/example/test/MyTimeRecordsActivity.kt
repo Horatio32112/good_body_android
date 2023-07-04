@@ -61,6 +61,12 @@ class MyTimeRecordsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val context = this
         return when (item.itemId) {
+            R.id.menu_FindUser -> {
+                val intent = Intent(context, FindUserActivity::class.java)
+                context.startActivity(intent)
+
+                true
+            }
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
