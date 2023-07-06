@@ -1,4 +1,4 @@
-package com.example.test.activity.Basics
+package com.example.test.activity.basics
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
-import com.example.test.activity.InteractionOfUsers.FindUserActivity
-import com.example.test.activity.MyRecords.MySetsRecordsActivity
-import com.example.test.activity.MyRecords.MyTimeRecordsActivity
+import com.example.test.activity.interactionOfUsers.FindUserActivity
+import com.example.test.activity.myRecords.MySetsRecordsActivity
+import com.example.test.activity.myRecords.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.PersonalProfileData
@@ -21,35 +21,35 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MyPersonalProfileActivity : AppCompatActivity(){
+class MyPersonalProfileActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_personal_profile)
         val context = this
-        val height_field: EditText = findViewById(R.id.get_my_personal_profile_HeightInputField)
-        val weight_field: EditText = findViewById(R.id.get_my_personal_profile_WeightInputField)
-        val age_field: EditText = findViewById(R.id.get_my_personal_profile_AgeInputField)
-        val gender_field: EditText = findViewById(R.id.get_my_personal_profile_GenderInputField)
+        val heightField: EditText = findViewById(R.id.get_my_personal_profile_HeightInputField)
+        val weightField: EditText = findViewById(R.id.get_my_personal_profile_WeightInputField)
+        val ageField: EditText = findViewById(R.id.get_my_personal_profile_AgeInputField)
+        val genderField: EditText = findViewById(R.id.get_my_personal_profile_GenderInputField)
 
-        val update_button: Button = findViewById(R.id.get_my_personal_profile_UpdateProfileButton)
-        val back_home_button: Button = findViewById(R.id.get_my_personal_profile_BackHomeButton)
+        val updateButton: Button = findViewById(R.id.get_my_personal_profile_UpdateProfileButton)
+        val backHomeButton: Button = findViewById(R.id.get_my_personal_profile_BackHomeButton)
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
 
 
-        fun setTextByResponse(response:PersonalProfileData){
-            height_field.setText(response?.height.toString())
-            weight_field.setText(response?.weight.toString())
-            age_field.setText(response?.age.toString())
-            gender_field.setText(response?.gender ?: "unknowned")
+        fun setTextByResponse(response: PersonalProfileData) {
+            heightField.setText(response.height.toString())
+            weightField.setText(response.weight.toString())
+            ageField.setText(response.age.toString())
+            genderField.setText(response.gender)
         }
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        var retrofitData1 = retrofitBuilder1.get_profile(account.toString())
+        val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+        val retrofitData1 = retrofitBuilder1.get_profile(account.toString())
         retrofitData1.enqueue(object : Callback<PersonalProfileData> {
             override fun onResponse(
                 call: Call<PersonalProfileData>,
@@ -59,26 +59,31 @@ class MyPersonalProfileActivity : AppCompatActivity(){
 
                 if (response.isSuccessful) {
                     //API回傳結果
-                    var response = response.body()
+                    val response = response.body()
                     response?.let { it1 -> setTextByResponse(it1) }
 
-                    Log.d("header ", "${account} got his own profile")
+                    Log.d("header ", "$account got his own profile")
 
                 } else {
-                    Log.d("header ", "${account} failed to get his own profile")
+                    Log.d("header ", "$account failed to get his own profile")
                     // 處理 API 錯誤回應
                 }
             }
+
             override fun onFailure(call: Call<PersonalProfileData>, t: Throwable) {
-                Log.d("header ", "${account} failed to get his own profile")
+                Log.d("header ", "$account failed to get his own profile")
             }
         })
 
-        update_button.setOnClickListener {
-            val okHttpClient = ApiSetUp.createOkHttpClient()
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            var retrofitData1 = retrofitBuilder1.update_profile(account.toString(),height_field.text.toString().toInt(),weight_field.text.toString().toInt(),age_field.text.toString().toInt(),gender_field.text.toString())
-            retrofitData1.enqueue(object : Callback<PersonalProfileData> {
+        updateButton.setOnClickListener {
+            val retrofitData2 = retrofitBuilder1.update_profile(
+                account.toString(),
+                heightField.text.toString().toInt(),
+                weightField.text.toString().toInt(),
+                ageField.text.toString().toInt(),
+                genderField.text.toString()
+            )
+            retrofitData2.enqueue(object : Callback<PersonalProfileData> {
                 override fun onResponse(
                     call: Call<PersonalProfileData>,
                     response: Response<PersonalProfileData>
@@ -87,29 +92,29 @@ class MyPersonalProfileActivity : AppCompatActivity(){
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        var response = response.body()
+                        val response = response.body()
                         response?.let { it1 -> setTextByResponse(it1) }
 
                         val toast = Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT)
                         toast.show()
 
-                        Log.d("header ", "${account} updated his own profile")
+                        Log.d("header ", "$account updated his own profile")
 
                     } else {
-                        Log.d("header ", "${account} failed to update his own profile")
+                        Log.d("header ", "$account failed to update his own profile")
                         // 處理 API 錯誤回應
                     }
                 }
+
                 override fun onFailure(call: Call<PersonalProfileData>, t: Throwable) {
-                    Log.d("header ", "${account} failed to update his own profile")
+                    Log.d("header ", "$account failed to update his own profile")
                 }
             })
         }
-        back_home_button.setOnClickListener {
+        backHomeButton.setOnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
             context.startActivity(intent)
         }
-
 
 
     }
@@ -128,6 +133,7 @@ class MyPersonalProfileActivity : AppCompatActivity(){
 
                 true
             }
+
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)

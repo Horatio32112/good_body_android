@@ -1,4 +1,4 @@
-package com.example.test.activity.Basics
+package com.example.test.activity.basics
 
 import android.content.Context
 import android.content.Intent
@@ -11,12 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Adapter.RecommendRecordItemAdapter
+import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.R
-import com.example.test.activity.InteractionOfUsers.FindUserActivity
-import com.example.test.activity.InteractionOfUsers.UserProfileActivity
-import com.example.test.activity.MyRecords.MySetsRecordsActivity
-import com.example.test.activity.MyRecords.MyTimeRecordsActivity
+import com.example.test.activity.interactionOfUsers.FindUserActivity
+import com.example.test.activity.interactionOfUsers.UserProfileActivity
+import com.example.test.activity.myRecords.MySetsRecordsActivity
+import com.example.test.activity.myRecords.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
@@ -35,20 +35,20 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val recommend_account_text1: TextView = findViewById(R.id.home_recommend_follow_Text1)
-        val recommend_account_text2: TextView = findViewById(R.id.home_recommend_follow_Text2)
-        val recommend_account_text3: TextView = findViewById(R.id.home_recommend_follow_Text3)
-        val check_out_button1: Button = findViewById(R.id.home_recommend_CheckOutBtn1)
-        val check_out_button2: Button = findViewById(R.id.home_recommend_CheckOutBtn2)
-        val check_out_button3: Button = findViewById(R.id.home_recommend_CheckOutBtn3)
+        val recommendAccountText1: TextView = findViewById(R.id.home_recommend_follow_Text1)
+        val recommendAccountText2: TextView = findViewById(R.id.home_recommend_follow_Text2)
+        val recommendAccountText3: TextView = findViewById(R.id.home_recommend_follow_Text3)
+        val checkOutButton1: Button = findViewById(R.id.home_recommend_CheckOutBtn1)
+        val checkOutButton2: Button = findViewById(R.id.home_recommend_CheckOutBtn2)
+        val checkOutButton3: Button = findViewById(R.id.home_recommend_CheckOutBtn3)
         val context: Context = this
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
-        val user_id = sharedPreferences.getInt("user_id", -1)
+        val userId = sharedPreferences.getInt("user_id", -1)
 
-        var RecommendedSetsRecords :List<SetsRecord>?=null
-        var RecommendedTimeRecords :List<TimesRecord>?=null
-        var RecommendedRecords :List<Any?>?=null
+        var recommendedSetsRecords :List<SetsRecord>?
+        var recommendedTimeRecords :List<TimesRecord>?
+        var recommendedRecords :List<Any?>?
         val recyclerView = findViewById<RecyclerView>(R.id.home_RecycleView)
 
 
@@ -57,8 +57,8 @@ class HomeActivity : AppCompatActivity() {
 
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        var retrofitData1 = retrofitBuilder1.get_recommend_followers(user_id.toString())
+        val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+        val retrofitData1 = retrofitBuilder1.get_recommend_followers(userId.toString())
         retrofitData1.enqueue(object : Callback<RecommendFollowers> {
             override fun onResponse(
                 call: Call<RecommendFollowers>,
@@ -68,32 +68,32 @@ class HomeActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     //API回傳結果
-                    var response = response.body()
+                    val response = response.body()
 
-                    recommend_account_text1.text= response!!.account1
-                    recommend_account_text2.text=response.account2
-                    recommend_account_text3.text=response.account3
-                    check_out_button1.setOnClickListener{
+                    recommendAccountText1.text= response!!.account1
+                    recommendAccountText2.text=response.account2
+                    recommendAccountText3.text=response.account3
+                    checkOutButton1.setOnClickListener{
                         val intent = Intent(context, UserProfileActivity::class.java)
-                        intent.putExtra("object_user_account", recommend_account_text1.text)
+                        intent.putExtra("object_user_account", recommendAccountText1.text)
                         context.startActivity(intent)
                     }
-                    check_out_button2.setOnClickListener{
+                    checkOutButton2.setOnClickListener{
                         val intent = Intent(context, UserProfileActivity::class.java)
-                        intent.putExtra("object_user_account", recommend_account_text2.text)
+                        intent.putExtra("object_user_account", recommendAccountText2.text)
                         context.startActivity(intent)
                     }
-                    check_out_button3.setOnClickListener{
+                    checkOutButton3.setOnClickListener{
                         val intent = Intent(context, UserProfileActivity::class.java)
-                        intent.putExtra("object_user_account", recommend_account_text3.text)
+                        intent.putExtra("object_user_account", recommendAccountText3.text)
                         context.startActivity(intent)
                     }
 
-                    Log.d("header ", "Got recommend followers for id=${user_id}")
+                    Log.d("header ", "Got recommend followers for id=${userId}")
 
                 } else {
                     Log.d("header ", "something went wrong when calling recommend followers api")
-                    Log.d("header ", "id=${user_id}")
+                    Log.d("header ", "id=${userId}")
                     Log.d("header ", "${response}")
                     // 處理 API 錯誤回應
                 }
@@ -105,16 +105,16 @@ class HomeActivity : AppCompatActivity() {
         })
 
         lifecycleScope.launch {
-            val Setsdata =  Datasource().RecommedSetsRecords(user_id)
-            val Timedata =  Datasource().RecommedTimesRecords(user_id)
+            val setsData =  Datasource().RecommedSetsRecords(userId)
+            val timeData =  Datasource().RecommedTimesRecords(userId)
 
-            RecommendedSetsRecords=Setsdata
-            RecommendedTimeRecords=Timedata
-            RecommendedRecords = RecommendedSetsRecords
-            for(timerecord in RecommendedTimeRecords!!){
-                RecommendedRecords = RecommendedRecords?.plus(timerecord)
+            recommendedSetsRecords=setsData
+            recommendedTimeRecords=timeData
+            recommendedRecords = recommendedSetsRecords
+            for(timeRecord in recommendedTimeRecords!!){
+                recommendedRecords = recommendedRecords?.plus(timeRecord)
             }
-            recyclerView.adapter = RecommendRecordItemAdapter(context, RecommendedRecords)
+            recyclerView.adapter = RecommendRecordItemAdapter(recommendedRecords)
             recyclerView.setHasFixedSize(true)
         }
 

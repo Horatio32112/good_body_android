@@ -1,6 +1,5 @@
-package com.example.test.Adapter
+package com.example.test.adapter
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +15,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TimeRecordItemAdapter(private val context: Context, private val dataset: List<TimesRecord>?) : RecyclerView.Adapter<TimeRecordItemAdapter.ItemViewHolder>(){
-    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val ContentInputField: TextView = view.findViewById(R.id.time_record_ContentInput)
-        val DurationInputField: TextView = view.findViewById(R.id.time_record_DurationInput)
-        val DistanceInputField: TextView = view.findViewById(R.id.time_record_DistanceInput)
+class TimeRecordItemAdapter(private val dataset: List<TimesRecord>) :
+    RecyclerView.Adapter<TimeRecordItemAdapter.ItemViewHolder>() {
+    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val contentInputField: TextView = view.findViewById(R.id.time_record_ContentInput)
+        val durationInputField: TextView = view.findViewById(R.id.time_record_DurationInput)
+        val distanceInputField: TextView = view.findViewById(R.id.time_record_DistanceInput)
 
-        val UpdateBtn: TextView = view.findViewById(R.id.time_record_UpdateBtn)
+        val updateBtn: TextView = view.findViewById(R.id.time_record_UpdateBtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -32,24 +32,25 @@ class TimeRecordItemAdapter(private val context: Context, private val dataset: L
     }
 
     override fun getItemCount(): Int {
-        return dataset?.size ?: return 0
+        return dataset.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val time_record = dataset?.get(position)
-        val record_id= time_record?.record_id
-        holder.ContentInputField.text = time_record?.contents
-        holder.DurationInputField.text = time_record?.duration.toString()
-        holder.DistanceInputField.text = time_record?.distance.toString()
+        val timeRecord = dataset[position]
+        val recordId = timeRecord.record_id
+        holder.contentInputField.text = timeRecord.contents
+        holder.durationInputField.text = timeRecord.duration.toString()
+        holder.distanceInputField.text = timeRecord.distance.toString()
 
-        holder.UpdateBtn.setOnClickListener{
-            val content=holder.ContentInputField.text.toString()
-            val duration=holder.DurationInputField.getText().toString().toInt()
-            val distance=holder.DistanceInputField.getText().toString().toFloat()
+        holder.updateBtn.setOnClickListener {
+            val content = holder.contentInputField.text.toString()
+            val duration = holder.durationInputField.text.toString().toInt()
+            val distance = holder.distanceInputField.text.toString().toFloat()
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            var retrofitData1 = retrofitBuilder1.update_time_records(record_id,content,duration,distance)
+            val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+            val retrofitData1 =
+                retrofitBuilder1.update_time_records(recordId, content, duration, distance)
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
@@ -59,13 +60,14 @@ class TimeRecordItemAdapter(private val context: Context, private val dataset: L
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        Log.d("header ", "record id ${record_id} is updated")
+                        Log.d("header ", "record id $recordId is updated")
 
                     } else {
-                        Log.d("header ", "record id ${record_id} failed to update")
+                        Log.d("header ", "record id $recordId failed to update")
                         // 處理 API 錯誤回應
                     }
                 }
+
                 override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
                     Log.d("header ", "update_time_records_api call failed")
                 }

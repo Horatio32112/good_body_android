@@ -1,4 +1,4 @@
-package com.example.test.activity.InteractionOfUsers
+package com.example.test.activity.interactionOfUsers
 
 import android.content.Context
 import android.content.Intent
@@ -11,12 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.Adapter.RecommendRecordItemAdapter
+import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.R
-import com.example.test.activity.Basics.HomeActivity
-import com.example.test.activity.Basics.MyPersonalProfileActivity
-import com.example.test.activity.MyRecords.MySetsRecordsActivity
-import com.example.test.activity.MyRecords.MyTimeRecordsActivity
+import com.example.test.activity.basics.HomeActivity
+import com.example.test.activity.basics.MyPersonalProfileActivity
+import com.example.test.activity.myRecords.MySetsRecordsActivity
+import com.example.test.activity.myRecords.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
@@ -26,52 +26,52 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserProfileActivity : AppCompatActivity(){
+class UserProfileActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
         val context = this
-        val ObjectUserAccount = intent?.extras?.getString("object_user_account").toString()
-        val AccountField: TextView = findViewById(R.id.user_profile_AccountField)
-        val follow_button: Button = findViewById(R.id.user_profile_FollowBtn)
-        val back_home_button: Button = findViewById(R.id.user_profile_BackHomeBtn)
+        val objectUserAccount = intent?.extras?.getString("object_user_account").toString()
+        val accountField: TextView = findViewById(R.id.user_profile_AccountField)
+        val followButton: Button = findViewById(R.id.user_profile_FollowBtn)
+        val backHomeButton: Button = findViewById(R.id.user_profile_BackHomeBtn)
         val recyclerView = findViewById<RecyclerView>(R.id.user_profile_RecycleView)
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
-        var Records:List<Any>? = null
-        var FollowBtnStatus:String = "null"
+        var records: List<Any>?
+        var followBtnStatus = "null"
 
-        AccountField.text=ObjectUserAccount
+        accountField.text = objectUserAccount
 
 
-        back_home_button.setOnClickListener {
+        backHomeButton.setOnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
             context.startActivity(intent)
         }
 
-        fun SetUpFollowBtn(){
-            if(FollowBtnStatus=="following") {
-                follow_button.text="Unfollow"
-                follow_button.setOnClickListener{
+        fun setUpFollowBtn() {
+            if (followBtnStatus == "following") {
+                followButton.text = "Unfollow"
+                followButton.setOnClickListener {
 
                     lifecycleScope.launch {
-                        Datasource().UnFollow(account,ObjectUserAccount)
-                        FollowBtnStatus="not_following"
-                        SetUpFollowBtn()
+                        Datasource().UnFollow(account, objectUserAccount)
+                        followBtnStatus = "not_following"
+                        setUpFollowBtn()
                         Log.d("header ", "status changed")
                     }
 
                 }
-            }else if(FollowBtnStatus=="not_following"){
-                follow_button.text="Follow"
-                follow_button.setOnClickListener{
+            } else if (followBtnStatus == "not_following") {
+                followButton.text = "Follow"
+                followButton.setOnClickListener {
 
                     lifecycleScope.launch {
-                        Datasource().Follow(account,ObjectUserAccount)
-                        FollowBtnStatus="following"
-                        SetUpFollowBtn()
+                        Datasource().Follow(account, objectUserAccount)
+                        followBtnStatus = "following"
+                        setUpFollowBtn()
                         Log.d("header ", "status changed")
                     }
 
@@ -82,8 +82,8 @@ class UserProfileActivity : AppCompatActivity(){
 
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        var retrofitData1 = retrofitBuilder1.check_follow(account,ObjectUserAccount)
+        val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+        val retrofitData1 = retrofitBuilder1.check_follow(account, objectUserAccount)
         retrofitData1.enqueue(object : Callback<OperationMsg> {
             override fun onResponse(
                 call: Call<OperationMsg>,
@@ -93,20 +93,24 @@ class UserProfileActivity : AppCompatActivity(){
 
                 if (response.isSuccessful) {
                     //API回傳結果
-                    var follow_status : String? = response.body()?.Msg
-                    Log.d("header ", "${follow_status}")
-                    if(follow_status=="following" || follow_status=="not_following"){
-                        FollowBtnStatus=follow_status
-                        SetUpFollowBtn()
+                    val followStatus: String? = response.body()?.Msg
+                    Log.d("header ", "$followStatus")
+                    if (followStatus == "following" || followStatus == "not_following") {
+                        followBtnStatus = followStatus
+                        setUpFollowBtn()
                     }
 
-                    Log.d("header ", "${account} checked follow status of ${ObjectUserAccount}")
+                    Log.d("header ", "$account checked follow status of $objectUserAccount")
 
                 } else {
-                    Log.d("header ", "${account} failed to checked follow status of ${ObjectUserAccount}")
+                    Log.d(
+                        "header ",
+                        "$account failed to checked follow status of $objectUserAccount"
+                    )
                     // 處理 API 錯誤回應
                 }
             }
+
             override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
                 Log.d("header ", "CheckFollowApi call failed")
             }
@@ -114,21 +118,21 @@ class UserProfileActivity : AppCompatActivity(){
         })
 
         lifecycleScope.launch {
-            val Setsdata =  Datasource().loadSetsRecords(ObjectUserAccount.toString())
-            val Timedata =  Datasource().loadTimesRecords(ObjectUserAccount.toString())
+            val setsData = Datasource().loadSetsRecords(objectUserAccount)
+            val timeData = Datasource().loadTimesRecords(objectUserAccount)
 
-            Records = Setsdata
-            for(timerecord in Timedata!!){
-                Records = Records?.plus(timerecord)
+            records = setsData
+            for (timesRecord in timeData) {
+                records = records?.plus(timesRecord)
             }
-            Log.d("header ", "${Records}")
-            recyclerView.adapter = RecommendRecordItemAdapter(context, Records)
+            Log.d("header ", "$records")
+            recyclerView.adapter = RecommendRecordItemAdapter(records)
             recyclerView.setHasFixedSize(true)
         }
 
 
-
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -143,6 +147,7 @@ class UserProfileActivity : AppCompatActivity(){
 
                 true
             }
+
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
