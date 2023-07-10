@@ -41,7 +41,7 @@ class AddTimeRecordsActivity: AppCompatActivity() {
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
             val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val retrofitData1 = retrofitBuilder1.create_time_records(userId,content,duration, distance)
+            val retrofitData1 = retrofitBuilder1.createTimeRecords(userId,content,duration, distance)
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,

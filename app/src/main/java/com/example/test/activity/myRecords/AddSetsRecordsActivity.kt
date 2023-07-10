@@ -43,7 +43,7 @@ class AddSetsRecordsActivity: AppCompatActivity() {
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
             val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val retrofitData1 = retrofitBuilder1.create_sets_records(userId,content,sets,reps,weight)
+            val retrofitData1 = retrofitBuilder1.createSetsRecords(userId,content,sets,reps,weight)
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
