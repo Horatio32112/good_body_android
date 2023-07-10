@@ -6,7 +6,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.http2.Http2Reader
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -50,7 +49,10 @@ class ApiSetUp {
             }
         }
 
-        inline fun <reified T> createRetrofit(okHttpClient: OkHttpClient, serverUrl: String="http://10.0.2.2:3000"): T {
+        inline fun <reified T> createRetrofit(
+            okHttpClient: OkHttpClient,
+            serverUrl: String = "http://10.0.2.2:3000"
+        ): T {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(serverUrl)                                     //設定請求URL

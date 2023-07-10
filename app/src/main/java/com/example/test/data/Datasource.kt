@@ -13,10 +13,10 @@ import retrofit2.Response
 
 class Datasource {
     private val client = ApiSetUp.createOkHttpClient()
-    suspend fun loadSetsRecords(account:String): List<SetsRecord>? {
-        return suspendCancellableCoroutine<List<SetsRecord>?> {
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
-            var retrofitData1 = retrofitBuilder1.get_sets_records(account)
+    private val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
+    suspend fun loadSetsRecords(account: String): List<SetsRecord> {
+        return suspendCancellableCoroutine {
+            val retrofitData1 = retrofitBuilder1.getSetsRecords(account)
             retrofitData1.enqueue(object : Callback<List<SetsRecord>> {
                 override fun onResponse(
                     call: Call<List<SetsRecord>>,
@@ -27,17 +27,18 @@ class Datasource {
                     if (response.isSuccessful) {
                         //API回傳結果
 
-                        var response = response.body()
+                        val response = response.body() ?: listOf()
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "${account} got his own sets records")
+                        Log.d("header ", "$account got his own sets records")
 
                     } else {
-                        Log.d("header ", "${account} failed to get his sets records")
+                        Log.d("header ", "$account failed to get his sets records")
                         // 處理 API 錯誤回應
                         it.resumeWith(Result.failure(Exception()))
                     }
                 }
+
                 override fun onFailure(call: Call<List<SetsRecord>>, t: Throwable) {
                     Log.d("header ", "GetSetsRecordsApi call failed")
                     it.resumeWith(Result.failure(Exception()))
@@ -47,10 +48,9 @@ class Datasource {
 
     }
 
-    suspend fun loadTimesRecords(account:String): List<TimesRecord>? {
-        return suspendCancellableCoroutine<List<TimesRecord>?> {
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
-            var retrofitData1 = retrofitBuilder1.get_times_records(account)
+    suspend fun loadTimesRecords(account: String): List<TimesRecord> {
+        return suspendCancellableCoroutine {
+            val retrofitData1 = retrofitBuilder1.getTimesRecords(account)
             retrofitData1.enqueue(object : Callback<List<TimesRecord>> {
                 override fun onResponse(
                     call: Call<List<TimesRecord>>,
@@ -61,17 +61,18 @@ class Datasource {
                     if (response.isSuccessful) {
                         //API回傳結果
 
-                        var response = response.body()
+                        val response = response.body() ?: listOf()
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "${account} got his own time records")
+                        Log.d("header ", "$account got his own time records")
 
                     } else {
-                        Log.d("header ", "${account} failed to get his time records")
+                        Log.d("header ", "$account failed to get his time records")
                         // 處理 API 錯誤回應
                         it.resumeWith(Result.failure(Exception()))
                     }
                 }
+
                 override fun onFailure(call: Call<List<TimesRecord>>, t: Throwable) {
                     Log.d("header ", "GetTimesRecordsApi call failed")
                     it.resumeWith(Result.failure(Exception()))
@@ -81,10 +82,9 @@ class Datasource {
 
     }
 
-    suspend fun RecommedTimesRecords(user_id:Int): List<TimesRecord>? {
-        return suspendCancellableCoroutine<List<TimesRecord>?> {
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
-            var retrofitData1 = retrofitBuilder1.get_recommend_times_records(user_id)
+    suspend fun recommendTimesRecords(user_id: Int): List<TimesRecord> {
+        return suspendCancellableCoroutine {
+            val retrofitData1 = retrofitBuilder1.getRecommendTimesRecords(user_id)
             retrofitData1.enqueue(object : Callback<List<TimesRecord>> {
                 override fun onResponse(
                     call: Call<List<TimesRecord>>,
@@ -95,17 +95,21 @@ class Datasource {
                     if (response.isSuccessful) {
                         //API回傳結果
 
-                        var response = response.body()
+                        val response = response.body() ?: listOf()
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "user_id = ${user_id} got recommended time records")
+                        Log.d("header ", "user_id = $user_id got recommended time records")
 
                     } else {
-                        Log.d("header ", "user_id = ${user_id} failed to get recommended time records")
+                        Log.d(
+                            "header ",
+                            "user_id = $user_id failed to get recommended time records"
+                        )
                         // 處理 API 錯誤回應
                         it.resumeWith(Result.failure(Exception()))
                     }
                 }
+
                 override fun onFailure(call: Call<List<TimesRecord>>, t: Throwable) {
                     Log.d("header ", "GetRecommendedTimeRecord call failed")
                     it.resumeWith(Result.failure(Exception()))
@@ -115,10 +119,9 @@ class Datasource {
 
     }
 
-    suspend fun RecommedSetsRecords(user_id:Int): List<SetsRecord>? {
-        return suspendCancellableCoroutine<List<SetsRecord>?> {
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
-            var retrofitData1 = retrofitBuilder1.get_recommend_sets_records(user_id)
+    suspend fun recommendSetsRecords(user_id: Int): List<SetsRecord> {
+        return suspendCancellableCoroutine {
+            val retrofitData1 = retrofitBuilder1.getRecommendSetsRecords(user_id)
             retrofitData1.enqueue(object : Callback<List<SetsRecord>> {
                 override fun onResponse(
                     call: Call<List<SetsRecord>>,
@@ -129,17 +132,21 @@ class Datasource {
                     if (response.isSuccessful) {
                         //API回傳結果
 
-                        var response = response.body()
+                        val response = response.body() ?: listOf()
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "user_id = ${user_id} got recommended sets records")
+                        Log.d("header ", "user_id = $user_id got recommended sets records")
 
                     } else {
-                        Log.d("header ", "user_id = ${user_id} failed to get recommended sets records")
+                        Log.d(
+                            "header ",
+                            "user_id = $user_id failed to get recommended sets records"
+                        )
                         // 處理 API 錯誤回應
                         it.resumeWith(Result.failure(Exception()))
                     }
                 }
+
                 override fun onFailure(call: Call<List<SetsRecord>>, t: Throwable) {
                     Log.d("header ", "GetRecommendedSetsRecord call failed")
                     it.resumeWith(Result.failure(Exception()))
@@ -147,11 +154,11 @@ class Datasource {
             })
         }
     }
-    suspend fun Follow(SubjectUserAccount:String?,ObjectUserAccount:String):OperationMsg? {
-        return suspendCancellableCoroutine<OperationMsg?> {
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
-            var retrofitData1 = retrofitBuilder1.follow(SubjectUserAccount,ObjectUserAccount)
-            retrofitData1.enqueue(object : Callback<OperationMsg>{
+
+    suspend fun follow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
+        return suspendCancellableCoroutine {
+            val retrofitData1 = retrofitBuilder1.follow(SubjectUserAccount, ObjectUserAccount)
+            retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>
@@ -160,17 +167,18 @@ class Datasource {
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        var response = response.body()
+                        val response = response.body() ?: OperationMsg("")
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "${SubjectUserAccount} followed ${ObjectUserAccount}")
+                        Log.d("header ", "$SubjectUserAccount followed $ObjectUserAccount")
 
                     } else {
-                        Log.d("header ", "${SubjectUserAccount} failed to follow ${ObjectUserAccount}")
+                        Log.d("header ", "$SubjectUserAccount failed to follow $ObjectUserAccount")
                         // 處理 API 錯誤回應
                         it.resumeWith(Result.failure(Exception()))
                     }
                 }
+
                 override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
                     Log.d("header ", "FollowApi call failed")
                     it.resumeWith(Result.failure(Exception()))
@@ -179,11 +187,10 @@ class Datasource {
         }
     }
 
-    suspend fun UnFollow(SubjectUserAccount:String?,ObjectUserAccount:String):OperationMsg? {
-        return suspendCancellableCoroutine<OperationMsg?> {
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
-            var retrofitData1 = retrofitBuilder1.unfollow(SubjectUserAccount,ObjectUserAccount)
-            retrofitData1.enqueue(object : Callback<OperationMsg>{
+    suspend fun unFollow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg? {
+        return suspendCancellableCoroutine {
+            val retrofitData1 = retrofitBuilder1.unfollow(SubjectUserAccount, ObjectUserAccount)
+            retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>
@@ -192,17 +199,18 @@ class Datasource {
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        var response = response.body()
+                        val response = response.body()
                         it.resumeWith(Result.success(response))
 
-                        Log.d("header ", "${SubjectUserAccount} unfollowed ${ObjectUserAccount}")
+                        Log.d("header ", "$SubjectUserAccount unfollowed $ObjectUserAccount")
 
                     } else {
-                        Log.d("header ", "${SubjectUserAccount} failed to follow ${ObjectUserAccount}")
+                        Log.d("header ", "$SubjectUserAccount failed to follow $ObjectUserAccount")
                         // 處理 API 錯誤回應
                         it.resumeWith(Result.failure(Exception()))
                     }
                 }
+
                 override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
                     Log.d("header ", "FollowApi call failed")
                     it.resumeWith(Result.failure(Exception()))
