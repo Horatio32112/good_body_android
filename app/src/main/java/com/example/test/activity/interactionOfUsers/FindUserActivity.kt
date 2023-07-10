@@ -49,7 +49,7 @@ class FindUserActivity : AppCompatActivity() {
             else{
             val okHttpClient = ApiSetUp.createOkHttpClient()
             val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val retrofitData1 = retrofitBuilder1.check_user_existence(accountInputField.text.toString())
+            val retrofitData1 = retrofitBuilder1.checkUserExistence(accountInputField.text.toString())
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,

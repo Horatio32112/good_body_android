@@ -9,13 +9,12 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.adapter.SetsRecordItemAdapter
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.interactionOfUsers.FindUserActivity
+import com.example.test.adapter.SetsRecordItemAdapter
 import com.example.test.data.Datasource
-import com.example.test.model.SetsRecord
 import kotlinx.coroutines.launch
 
 class MySetsRecordsActivity : AppCompatActivity() {
@@ -42,8 +41,7 @@ class MySetsRecordsActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            var data : List<SetsRecord> = listOf()
-                data = Datasource().loadSetsRecords(account.toString())
+            val data = Datasource().loadSetsRecords(account.toString())
 
             recyclerView.adapter = SetsRecordItemAdapter(data)
             recyclerView.setHasFixedSize(true)

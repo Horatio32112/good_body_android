@@ -57,7 +57,7 @@ class UserProfileActivity : AppCompatActivity() {
                 followButton.setOnClickListener {
 
                     lifecycleScope.launch {
-                        Datasource().UnFollow(account, objectUserAccount)
+                        Datasource().unFollow(account, objectUserAccount)
                         followBtnStatus = "not_following"
                         setUpFollowBtn()
                         Log.d("header ", "status changed")
@@ -69,7 +69,7 @@ class UserProfileActivity : AppCompatActivity() {
                 followButton.setOnClickListener {
 
                     lifecycleScope.launch {
-                        Datasource().Follow(account, objectUserAccount)
+                        Datasource().follow(account, objectUserAccount)
                         followBtnStatus = "following"
                         setUpFollowBtn()
                         Log.d("header ", "status changed")
@@ -83,7 +83,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
         val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        val retrofitData1 = retrofitBuilder1.check_follow(account, objectUserAccount)
+        val retrofitData1 = retrofitBuilder1.checkFollow(account, objectUserAccount)
         retrofitData1.enqueue(object : Callback<OperationMsg> {
             override fun onResponse(
                 call: Call<OperationMsg>,

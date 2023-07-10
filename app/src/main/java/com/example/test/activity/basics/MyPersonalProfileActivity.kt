@@ -16,7 +16,7 @@ import com.example.test.activity.myRecords.MySetsRecordsActivity
 import com.example.test.activity.myRecords.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
-import com.example.test.model.PersonalProfileData
+import com.example.test.model.PersonalProfile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +40,7 @@ class MyPersonalProfileActivity : AppCompatActivity() {
         val account = sharedPreferences.getString("account", "")
 
 
-        fun setTextByResponse(response: PersonalProfileData) {
+        fun setTextByResponse(response: PersonalProfile) {
             heightField.setText(response.height.toString())
             weightField.setText(response.weight.toString())
             ageField.setText(response.age.toString())
@@ -49,11 +49,11 @@ class MyPersonalProfileActivity : AppCompatActivity() {
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
         val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        val retrofitData1 = retrofitBuilder1.get_profile(account.toString())
-        retrofitData1.enqueue(object : Callback<PersonalProfileData> {
+        val retrofitData1 = retrofitBuilder1.getProfile(account.toString())
+        retrofitData1.enqueue(object : Callback<PersonalProfile> {
             override fun onResponse(
-                call: Call<PersonalProfileData>,
-                response: Response<PersonalProfileData>
+                call: Call<PersonalProfile>,
+                response: Response<PersonalProfile>
             ) {
                 Log.d("header ", "test ${Thread.currentThread()}")
 
@@ -70,23 +70,23 @@ class MyPersonalProfileActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<PersonalProfileData>, t: Throwable) {
+            override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
                 Log.d("header ", "$account failed to get his own profile")
             }
         })
 
         updateButton.setOnClickListener {
-            val retrofitData2 = retrofitBuilder1.update_profile(
+            val retrofitData2 = retrofitBuilder1.updateProfile(
                 account.toString(),
                 heightField.text.toString().toInt(),
                 weightField.text.toString().toInt(),
                 ageField.text.toString().toInt(),
                 genderField.text.toString()
             )
-            retrofitData2.enqueue(object : Callback<PersonalProfileData> {
+            retrofitData2.enqueue(object : Callback<PersonalProfile> {
                 override fun onResponse(
-                    call: Call<PersonalProfileData>,
-                    response: Response<PersonalProfileData>
+                    call: Call<PersonalProfile>,
+                    response: Response<PersonalProfile>
                 ) {
                     Log.d("header ", "test ${Thread.currentThread()}")
 
@@ -106,7 +106,7 @@ class MyPersonalProfileActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<PersonalProfileData>, t: Throwable) {
+                override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
                     Log.d("header ", "$account failed to update his own profile")
                 }
             })

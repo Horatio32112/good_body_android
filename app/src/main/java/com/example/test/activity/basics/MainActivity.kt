@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
                 val okHttpClient = ApiSetUp.createOkHttpClient()
                 val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val retrofitData1 = retrofitBuilder1.get_id(account)
+                val retrofitData1 = retrofitBuilder1.getId(account)
                 retrofitData1.enqueue(object : Callback<UserId> {
                     override fun onResponse(
                         call: Call<UserId>,
@@ -82,8 +82,8 @@ class MainActivity : AppCompatActivity() {
                             val intent = Intent(context, HomeActivity::class.java)
                             context.startActivity(intent)
 
-                            Log.d("header ", "user exists, id = ${userId}")
-                            Log.d("header ", "${account} logged in.")
+                            Log.d("header ", "user exists, id = $userId")
+                            Log.d("header ", "$account logged in.")
 
                         } else {
                             Log.d("header ", "user not exist or something went wrong")

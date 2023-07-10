@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 val okHttpClient = ApiSetUp.createOkHttpClient()
                 val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val retrofitData1 = retrofitBuilder1.register_account(
+                val retrofitData1 = retrofitBuilder1.registerAccount(
                     email,
                     password,
                     account,
@@ -90,7 +90,7 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
                             toast.show()
 
-                            val retrofitData2 = retrofitBuilder1.get_id(account)
+                            val retrofitData2 = retrofitBuilder1.getId(account)
                             retrofitData2.enqueue(object : Callback<UserId> {
                                 override fun onResponse(
                                     call: Call<UserId>,

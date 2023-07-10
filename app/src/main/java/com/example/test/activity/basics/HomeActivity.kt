@@ -58,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
         val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        val retrofitData1 = retrofitBuilder1.get_recommend_followers(userId.toString())
+        val retrofitData1 = retrofitBuilder1.getRecommendFollowers(userId.toString())
         retrofitData1.enqueue(object : Callback<RecommendFollowers> {
             override fun onResponse(
                 call: Call<RecommendFollowers>,
@@ -94,7 +94,7 @@ class HomeActivity : AppCompatActivity() {
                 } else {
                     Log.d("header ", "something went wrong when calling recommend followers api")
                     Log.d("header ", "id=${userId}")
-                    Log.d("header ", "${response}")
+                    Log.d("header ", "$response")
                     // 處理 API 錯誤回應
                 }
             }
@@ -105,8 +105,8 @@ class HomeActivity : AppCompatActivity() {
         })
 
         lifecycleScope.launch {
-            val setsData =  Datasource().RecommedSetsRecords(userId)
-            val timeData =  Datasource().RecommedTimesRecords(userId)
+            val setsData =  Datasource().recommendSetsRecords(userId)
+            val timeData =  Datasource().recommendTimesRecords(userId)
 
             recommendedSetsRecords=setsData
             recommendedTimeRecords=timeData
