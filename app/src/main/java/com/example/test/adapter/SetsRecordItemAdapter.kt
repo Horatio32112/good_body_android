@@ -53,7 +53,7 @@ class SetsRecordItemAdapter(private val dataset: List<SetsRecord>) :
             val okHttpClient = ApiSetUp.createOkHttpClient()
             val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
             val retrofitData1 =
-                retrofitBuilder1.update_sets_records(recordId, content, sets, reps, weight)
+                retrofitBuilder1.updateSetsRecords(recordId, content, sets, reps, weight)
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,

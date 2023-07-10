@@ -84,8 +84,7 @@ class RecommendRecordItemAdapter(private val dataset: List<Any?>?) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        val element = dataset?.get(position) // assuming your list is called "elements"
-        return when (element) {
+        return when (dataset?.get(position)) { // assuming your list is called "elements"
             is SetsRecord -> R.layout.recommend_sets_record_list_item
 
             is TimesRecord -> R.layout.recommend_time_record_list_item
