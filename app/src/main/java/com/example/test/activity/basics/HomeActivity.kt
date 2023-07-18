@@ -35,12 +35,12 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val recommendAccountText1: TextView = findViewById(R.id.home_recommend_follow_Text1)
-        val recommendAccountText2: TextView = findViewById(R.id.home_recommend_follow_Text2)
-        val recommendAccountText3: TextView = findViewById(R.id.home_recommend_follow_Text3)
-        val checkOutButton1: Button = findViewById(R.id.home_recommend_CheckOutBtn1)
-        val checkOutButton2: Button = findViewById(R.id.home_recommend_CheckOutBtn2)
-        val checkOutButton3: Button = findViewById(R.id.home_recommend_CheckOutBtn3)
+        val firstRecommendAccountText: TextView = findViewById(R.id.home_recommend_follow_FirstText)
+        val secondRecommendAccountText: TextView = findViewById(R.id.home_recommend_follow_SecondText)
+        val thirdRecommendAccountText: TextView = findViewById(R.id.home_recommend_follow_ThirdText)
+        val checkOutButton1: Button = findViewById(R.id.home_recommend_FirstCheckOutBtn)
+        val checkOutButton2: Button = findViewById(R.id.home_recommend_SecondCheckOutBtn)
+        val checkOutButton3: Button = findViewById(R.id.home_recommend_ThirdCheckOutBtn)
         val context: Context = this
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
@@ -70,22 +70,22 @@ class HomeActivity : AppCompatActivity() {
                     //API回傳結果
                     val response = response.body()
 
-                    recommendAccountText1.text= response!!.account1
-                    recommendAccountText2.text=response.account2
-                    recommendAccountText3.text=response.account3
+                    firstRecommendAccountText.text= response!!.account1
+                    secondRecommendAccountText.text=response.account2
+                    thirdRecommendAccountText.text=response.account3
                     checkOutButton1.setOnClickListener{
                         val intent = Intent(context, UserProfileActivity::class.java)
-                        intent.putExtra("object_user_account", recommendAccountText1.text)
+                        intent.putExtra("object_user_account", firstRecommendAccountText.text)
                         context.startActivity(intent)
                     }
                     checkOutButton2.setOnClickListener{
                         val intent = Intent(context, UserProfileActivity::class.java)
-                        intent.putExtra("object_user_account", recommendAccountText2.text)
+                        intent.putExtra("object_user_account", secondRecommendAccountText.text)
                         context.startActivity(intent)
                     }
                     checkOutButton3.setOnClickListener{
                         val intent = Intent(context, UserProfileActivity::class.java)
-                        intent.putExtra("object_user_account", recommendAccountText3.text)
+                        intent.putExtra("object_user_account", thirdRecommendAccountText.text)
                         context.startActivity(intent)
                     }
 
