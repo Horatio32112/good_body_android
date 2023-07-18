@@ -122,9 +122,8 @@ class UserProfileActivity : AppCompatActivity() {
             val timeData = Datasource().loadTimesRecords(objectUserAccount)
 
             records = setsData
-            for (timesRecord in timeData) {
-                records = records?.plus(timesRecord)
-            }
+            timeData.forEach{records = records?.plus(it)}
+
             Log.d("header ", "$records")
             recyclerView.adapter = RecommendRecordItemAdapter(records)
             recyclerView.setHasFixedSize(true)

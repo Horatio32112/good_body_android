@@ -11,12 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.R
 import com.example.test.activity.interactionOfUsers.FindUserActivity
 import com.example.test.activity.interactionOfUsers.UserProfileActivity
 import com.example.test.activity.myRecords.MySetsRecordsActivity
 import com.example.test.activity.myRecords.MyTimeRecordsActivity
+import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
@@ -36,7 +36,8 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         val firstRecommendAccountText: TextView = findViewById(R.id.home_recommend_follow_FirstText)
-        val secondRecommendAccountText: TextView = findViewById(R.id.home_recommend_follow_SecondText)
+        val secondRecommendAccountText: TextView =
+            findViewById(R.id.home_recommend_follow_SecondText)
         val thirdRecommendAccountText: TextView = findViewById(R.id.home_recommend_follow_ThirdText)
         val checkOutButton1: Button = findViewById(R.id.home_recommend_FirstCheckOutBtn)
         val checkOutButton2: Button = findViewById(R.id.home_recommend_SecondCheckOutBtn)
@@ -46,14 +47,8 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getInt("user_id", -1)
 
-        var recommendedSetsRecords :List<SetsRecord>?
-        var recommendedTimeRecords :List<TimesRecord>?
-        var recommendedRecords :List<Any?>?
+        var recommendedRecords: List<Any?>?
         val recyclerView = findViewById<RecyclerView>(R.id.home_RecycleView)
-
-
-
-
 
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
@@ -70,20 +65,20 @@ class HomeActivity : AppCompatActivity() {
                     //API回傳結果
                     val response = response.body()
 
-                    firstRecommendAccountText.text= response!!.account1
-                    secondRecommendAccountText.text=response.account2
-                    thirdRecommendAccountText.text=response.account3
-                    checkOutButton1.setOnClickListener{
+                    firstRecommendAccountText.text = response!!.account1
+                    secondRecommendAccountText.text = response.account2
+                    thirdRecommendAccountText.text = response.account3
+                    checkOutButton1.setOnClickListener {
                         val intent = Intent(context, UserProfileActivity::class.java)
                         intent.putExtra("object_user_account", firstRecommendAccountText.text)
                         context.startActivity(intent)
                     }
-                    checkOutButton2.setOnClickListener{
+                    checkOutButton2.setOnClickListener {
                         val intent = Intent(context, UserProfileActivity::class.java)
                         intent.putExtra("object_user_account", secondRecommendAccountText.text)
                         context.startActivity(intent)
                     }
-                    checkOutButton3.setOnClickListener{
+                    checkOutButton3.setOnClickListener {
                         val intent = Intent(context, UserProfileActivity::class.java)
                         intent.putExtra("object_user_account", thirdRecommendAccountText.text)
                         context.startActivity(intent)
@@ -98,6 +93,7 @@ class HomeActivity : AppCompatActivity() {
                     // 處理 API 錯誤回應
                 }
             }
+
             override fun onFailure(call: Call<RecommendFollowers>, t: Throwable) {
                 Log.d("header ", "recommend followers api call failed")
             }
@@ -105,22 +101,29 @@ class HomeActivity : AppCompatActivity() {
         })
 
         lifecycleScope.launch {
-            val setsData =  Datasource().recommendSetsRecords(userId)
-            val timeData =  Datasource().recommendTimesRecords(userId)
+            val setsData = Datasource().recommendSetsRecords(userId)
+            val timeData = Datasource().recommendTimesRecords(userId)
 
-            recommendedSetsRecords=setsData
-            recommendedTimeRecords=timeData
+            val recommendedSetsRecords = mutableListOf<SetsRecord>()
+            recommendedSetsRecords.clear()
+            recommendedSetsRecords.addAll(setsData)
+
+            val recommendedTimeRecords = mutableListOf<TimesRecord>()
+            recommendedTimeRecords.clear()
+            recommendedTimeRecords.addAll(timeData)
+
             recommendedRecords = recommendedSetsRecords
-            for(timeRecord in recommendedTimeRecords!!){
-                recommendedRecords = recommendedRecords?.plus(timeRecord)
-            }
+
+            recommendedTimeRecords.forEach{recommendedRecords = recommendedRecords?.plus(it)}
+
             recyclerView.adapter = RecommendRecordItemAdapter(recommendedRecords)
             recyclerView.setHasFixedSize(true)
         }
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu,menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -133,30 +136,29 @@ class HomeActivity : AppCompatActivity() {
 
                 true
             }
+
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
 
                 true
             }
+
             R.id.menu_MySetsRecords -> {
                 val intent = Intent(context, MySetsRecordsActivity::class.java)
                 context.startActivity(intent)
                 true
             }
+
             R.id.menu_MyTimeRecords -> {
                 val intent = Intent(context, MyTimeRecordsActivity::class.java)
                 context.startActivity(intent)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
-
-
-
 
 
 }
