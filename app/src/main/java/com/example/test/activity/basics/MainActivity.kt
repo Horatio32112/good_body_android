@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                             val editor = sharedPreferences.edit()
                             editor.putString("account", account)
 
-                            userId?.let { it1 -> editor.putInt("user_id", it1) }
+                            userId?.let { id -> editor.putInt("user_id", id) }
                             editor.apply()
 
                             val intent = Intent(context, HomeActivity::class.java)

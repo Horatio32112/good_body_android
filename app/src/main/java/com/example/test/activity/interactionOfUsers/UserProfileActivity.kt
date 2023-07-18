@@ -93,7 +93,7 @@ class UserProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     //API回傳結果
-                    val followStatus: String? = response.body()?.Msg
+                    val followStatus: String? = response.body()?.msg
                     Log.d("header ", "$followStatus")
                     if (followStatus == "following" || followStatus == "not_following") {
                         followBtnStatus = followStatus

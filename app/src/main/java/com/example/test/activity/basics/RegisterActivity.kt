@@ -3,7 +3,6 @@ package com.example.test.activity.basics
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -86,7 +85,7 @@ class RegisterActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             //API回傳結果
                             val toast =
-                                Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
+                                Toast.makeText(context, response.body()?.msg, Toast.LENGTH_SHORT)
                             toast.show()
 
                             val getIdApiCaller = apiBuilder.getId(account)
@@ -107,7 +106,7 @@ class RegisterActivity : AppCompatActivity() {
                                         )
                                         val editor = sharedPreferences.edit()
                                         editor.putString("account", account)
-                                        userId?.let { it1 -> editor.putInt("user_id", it1) }
+                                        userId?.let { id -> editor.putInt("user_id", id) }
                                         editor.apply()
 
                                         val intent = Intent(context, HomeActivity::class.java)

@@ -59,7 +59,7 @@ class FindUserActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        val msg : String? = response.body()?.Msg
+                        val msg : String? = response.body()?.msg
 
                         if(msg=="User_exist"){
                             val intent = Intent(context, UserProfileActivity::class.java)
