@@ -48,9 +48,9 @@ class MyPersonalProfileActivity : AppCompatActivity() {
         }
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        val retrofitData1 = retrofitBuilder1.getProfile(account.toString())
-        retrofitData1.enqueue(object : Callback<PersonalProfile> {
+        val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+        val getProfileApiCaller = apiBuilder.getProfile(account.toString())
+        getProfileApiCaller.enqueue(object : Callback<PersonalProfile> {
             override fun onResponse(
                 call: Call<PersonalProfile>,
                 response: Response<PersonalProfile>
@@ -76,14 +76,14 @@ class MyPersonalProfileActivity : AppCompatActivity() {
         })
 
         updateButton.setOnClickListener {
-            val retrofitData2 = retrofitBuilder1.updateProfile(
+            val updateProfileApiCaller = apiBuilder.updateProfile(
                 account.toString(),
                 heightField.text.toString().toInt(),
                 weightField.text.toString().toInt(),
                 ageField.text.toString().toInt(),
                 genderField.text.toString()
             )
-            retrofitData2.enqueue(object : Callback<PersonalProfile> {
+            updateProfileApiCaller.enqueue(object : Callback<PersonalProfile> {
                 override fun onResponse(
                     call: Call<PersonalProfile>,
                     response: Response<PersonalProfile>

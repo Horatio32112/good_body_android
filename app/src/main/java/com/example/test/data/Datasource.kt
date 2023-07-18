@@ -13,10 +13,10 @@ import retrofit2.Response
 
 class Datasource {
     private val client = ApiSetUp.createOkHttpClient()
-    private val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(client)
+    private val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(client)
     suspend fun loadSetsRecords(account: String): List<SetsRecord> {
         return suspendCancellableCoroutine {
-            val retrofitData1 = retrofitBuilder1.getSetsRecords(account)
+            val retrofitData1 = apiBuilder.getSetsRecords(account)
             retrofitData1.enqueue(object : Callback<List<SetsRecord>> {
                 override fun onResponse(
                     call: Call<List<SetsRecord>>,
@@ -50,7 +50,7 @@ class Datasource {
 
     suspend fun loadTimesRecords(account: String): List<TimesRecord> {
         return suspendCancellableCoroutine {
-            val retrofitData1 = retrofitBuilder1.getTimesRecords(account)
+            val retrofitData1 = apiBuilder.getTimesRecords(account)
             retrofitData1.enqueue(object : Callback<List<TimesRecord>> {
                 override fun onResponse(
                     call: Call<List<TimesRecord>>,
@@ -84,7 +84,7 @@ class Datasource {
 
     suspend fun recommendTimesRecords(user_id: Int): List<TimesRecord> {
         return suspendCancellableCoroutine {
-            val retrofitData1 = retrofitBuilder1.getRecommendTimesRecords(user_id)
+            val retrofitData1 = apiBuilder.getRecommendTimesRecords(user_id)
             retrofitData1.enqueue(object : Callback<List<TimesRecord>> {
                 override fun onResponse(
                     call: Call<List<TimesRecord>>,
@@ -121,7 +121,7 @@ class Datasource {
 
     suspend fun recommendSetsRecords(user_id: Int): List<SetsRecord> {
         return suspendCancellableCoroutine {
-            val retrofitData1 = retrofitBuilder1.getRecommendSetsRecords(user_id)
+            val retrofitData1 = apiBuilder.getRecommendSetsRecords(user_id)
             retrofitData1.enqueue(object : Callback<List<SetsRecord>> {
                 override fun onResponse(
                     call: Call<List<SetsRecord>>,
@@ -157,7 +157,7 @@ class Datasource {
 
     suspend fun follow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
         return suspendCancellableCoroutine {
-            val retrofitData1 = retrofitBuilder1.follow(SubjectUserAccount, ObjectUserAccount)
+            val retrofitData1 = apiBuilder.follow(SubjectUserAccount, ObjectUserAccount)
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
@@ -189,7 +189,7 @@ class Datasource {
 
     suspend fun unFollow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg? {
         return suspendCancellableCoroutine {
-            val retrofitData1 = retrofitBuilder1.unfollow(SubjectUserAccount, ObjectUserAccount)
+            val retrofitData1 = apiBuilder.unfollow(SubjectUserAccount, ObjectUserAccount)
             retrofitData1.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,

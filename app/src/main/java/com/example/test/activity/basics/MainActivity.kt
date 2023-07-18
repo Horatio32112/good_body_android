@@ -56,9 +56,9 @@ class MainActivity : AppCompatActivity() {
             } else {
 
                 val okHttpClient = ApiSetUp.createOkHttpClient()
-                val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val retrofitData1 = retrofitBuilder1.getId(account)
-                retrofitData1.enqueue(object : Callback<UserId> {
+                val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+                val apiCaller = apiBuilder.getId(account)
+                apiCaller.enqueue(object : Callback<UserId> {
                     override fun onResponse(
                         call: Call<UserId>,
                         response: Response<UserId>

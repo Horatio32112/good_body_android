@@ -57,9 +57,9 @@ class HomeActivity : AppCompatActivity() {
 
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        val retrofitData1 = retrofitBuilder1.getRecommendFollowers(userId.toString())
-        retrofitData1.enqueue(object : Callback<RecommendFollowers> {
+        val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+        val apiCaller = apiBuilder.getRecommendFollowers(userId.toString())
+        apiCaller.enqueue(object : Callback<RecommendFollowers> {
             override fun onResponse(
                 call: Call<RecommendFollowers>,
                 response: Response<RecommendFollowers>

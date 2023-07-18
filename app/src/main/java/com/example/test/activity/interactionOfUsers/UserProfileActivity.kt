@@ -82,9 +82,9 @@ class UserProfileActivity : AppCompatActivity() {
 
 
         val okHttpClient = ApiSetUp.createOkHttpClient()
-        val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-        val retrofitData1 = retrofitBuilder1.checkFollow(account, objectUserAccount)
-        retrofitData1.enqueue(object : Callback<OperationMsg> {
+        val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+        val apiCaller = apiBuilder.checkFollow(account, objectUserAccount)
+        apiCaller.enqueue(object : Callback<OperationMsg> {
             override fun onResponse(
                 call: Call<OperationMsg>,
                 response: Response<OperationMsg>

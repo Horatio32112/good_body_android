@@ -51,10 +51,10 @@ class SetsRecordItemAdapter(private val dataset: List<SetsRecord>) :
             val weight = holder.weightInputField.text.toString().toFloat()
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val retrofitData1 =
-                retrofitBuilder1.updateSetsRecords(recordId, content, sets, reps, weight)
-            retrofitData1.enqueue(object : Callback<OperationMsg> {
+            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+            val apiCaller =
+                apiBuilder.updateSetsRecords(recordId, content, sets, reps, weight)
+            apiCaller.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>

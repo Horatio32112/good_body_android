@@ -65,8 +65,8 @@ class RegisterActivity : AppCompatActivity() {
                 TODO("warn about empty blanks")
             } else {
                 val okHttpClient = ApiSetUp.createOkHttpClient()
-                val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val retrofitData1 = retrofitBuilder1.registerAccount(
+                val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+                val apiCaller = apiBuilder.registerAccount(
                     email,
                     password,
                     account,
@@ -77,7 +77,7 @@ class RegisterActivity : AppCompatActivity() {
                     weight,
                     gender
                 )
-                retrofitData1.enqueue(object : Callback<OperationMsg> {
+                apiCaller.enqueue(object : Callback<OperationMsg> {
                     override fun onResponse(
                         call: Call<OperationMsg>,
                         response: Response<OperationMsg>
@@ -90,7 +90,7 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
                             toast.show()
 
-                            val retrofitData2 = retrofitBuilder1.getId(account)
+                            val retrofitData2 = apiBuilder.getId(account)
                             retrofitData2.enqueue(object : Callback<UserId> {
                                 override fun onResponse(
                                     call: Call<UserId>,
@@ -150,52 +150,5 @@ class RegisterActivity : AppCompatActivity() {
     }
 }
 
-/**
-private fun api_connect() {
-
-val listView = findViewById<ListView>(R.id.)
-listView.adapter = SimpleAdapter()
-
-val okHttpClient = OkHttpClient.Builder()
-.addNetworkInterceptor(LoggingInterceptor())
-.connectTimeout(60L, TimeUnit.SECONDS)
-.readTimeout(60L, TimeUnit.SECONDS)
-.connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-.build()
-val retrofitBuilder = Retrofit.Builder()
-.client(okHttpClient)
-.addConverterFactory(GsonConverterFactory.create())
-.baseUrl("https://jsonplaceholder.typicode.com/")
-.build()
-.create(JsonPlaceholderService::class.java)
-val retrofitData = retrofitBuilder.posts()
-retrofitData.enqueue(object : Callback<List<User>> {
-override fun onResponse(
-call: Call<List<User>>,
-response: Response<List<User>>
-) {
-Log.d("header ","test ${Thread.currentThread()}")
-
-if (response.isSuccessful) {
-//API回傳結果
-val sb = StringBuffer()
-response.body()?.forEach { user ->
-sb.append(user.body)
-sb.append("\n")
-sb.append("---------------------\n")
-}
-// 在此處理 API 回應
-val textView: TextView = findViewById<TextView>(R.id.textView2)
-textView.text = sb.toString()
-} else {
-// 處理 API 錯誤回應
-}
-}
-
-override fun onFailure(call: Call<List<User>>, t: Throwable) {
-TODO("Not yet implemented")
-}
-
-})*/
 
 

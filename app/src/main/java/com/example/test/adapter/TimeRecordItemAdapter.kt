@@ -48,10 +48,10 @@ class TimeRecordItemAdapter(private val dataset: List<TimesRecord>) :
             val distance = holder.distanceInputField.text.toString().toFloat()
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val retrofitData1 =
-                retrofitBuilder1.updateTimeRecords(recordId, content, duration, distance)
-            retrofitData1.enqueue(object : Callback<OperationMsg> {
+            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+            val apiCaller =
+                apiBuilder.updateTimeRecords(recordId, content, duration, distance)
+            apiCaller.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>

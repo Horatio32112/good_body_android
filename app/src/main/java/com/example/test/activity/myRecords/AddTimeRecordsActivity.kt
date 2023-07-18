@@ -40,9 +40,9 @@ class AddTimeRecordsActivity: AppCompatActivity() {
             val userId = sharedPreferences.getInt("user_id", -1)
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            val retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val retrofitData1 = retrofitBuilder1.createTimeRecords(userId,content,duration, distance)
-            retrofitData1.enqueue(object : Callback<OperationMsg> {
+            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+            val apiCaller = apiBuilder.createTimeRecords(userId,content,duration, distance)
+            apiCaller.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>
