@@ -55,18 +55,17 @@ class RegisterActivity : AppCompatActivity() {
             val weight: Int = weightInput.text.toString().toInt()
             val age: Int = ageInput.text.toString().toInt()
 
-
-            if (TextUtils.isEmpty(account) ||
-                TextUtils.isEmpty(name) ||
-                TextUtils.isEmpty(email) ||
-                TextUtils.isEmpty(phoneNumber) ||
-                TextUtils.isEmpty(password)
+            if (account.isNullOrEmpty() ||
+                name.isNullOrEmpty() ||
+                email.isNullOrEmpty() ||
+                phoneNumber.isNullOrEmpty() ||
+                password.isNullOrEmpty()
             ) {
                 TODO("warn about empty blanks")
             } else {
                 val okHttpClient = ApiSetUp.createOkHttpClient()
                 val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val apiCaller = apiBuilder.registerAccount(
+                val registerAccountApiCaller = apiBuilder.registerAccount(
                     email,
                     password,
                     account,
@@ -77,7 +76,7 @@ class RegisterActivity : AppCompatActivity() {
                     weight,
                     gender
                 )
-                apiCaller.enqueue(object : Callback<OperationMsg> {
+                registerAccountApiCaller.enqueue(object : Callback<OperationMsg> {
                     override fun onResponse(
                         call: Call<OperationMsg>,
                         response: Response<OperationMsg>
@@ -90,8 +89,8 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
                             toast.show()
 
-                            val retrofitData2 = apiBuilder.getId(account)
-                            retrofitData2.enqueue(object : Callback<UserId> {
+                            val getIdApiCaller = apiBuilder.getId(account)
+                            getIdApiCaller.enqueue(object : Callback<UserId> {
                                 override fun onResponse(
                                     call: Call<UserId>,
                                     response: Response<UserId>
