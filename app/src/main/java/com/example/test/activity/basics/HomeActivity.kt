@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
-import com.example.test.activity.interactionOfUsers.FindUserActivity
-import com.example.test.activity.interactionOfUsers.UserProfileActivity
-import com.example.test.activity.myRecords.MySetsRecordsActivity
-import com.example.test.activity.myRecords.MyTimeRecordsActivity
+import com.example.test.activity.interactions.FindUserActivity
+import com.example.test.activity.interactions.OtherUserProfileActivity
+import com.example.test.activity.records.MySetsRecordsActivity
+import com.example.test.activity.records.MyTimeRecordsActivity
 import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
@@ -69,17 +69,17 @@ class HomeActivity : AppCompatActivity() {
                     secondRecommendAccountText.text = response.account2
                     thirdRecommendAccountText.text = response.account3
                     checkOutButton1.setOnClickListener {
-                        val intent = Intent(context, UserProfileActivity::class.java)
+                        val intent = Intent(context, OtherUserProfileActivity::class.java)
                         intent.putExtra("object_user_account", firstRecommendAccountText.text)
                         context.startActivity(intent)
                     }
                     checkOutButton2.setOnClickListener {
-                        val intent = Intent(context, UserProfileActivity::class.java)
+                        val intent = Intent(context, OtherUserProfileActivity::class.java)
                         intent.putExtra("object_user_account", secondRecommendAccountText.text)
                         context.startActivity(intent)
                     }
                     checkOutButton3.setOnClickListener {
-                        val intent = Intent(context, UserProfileActivity::class.java)
+                        val intent = Intent(context, OtherUserProfileActivity::class.java)
                         intent.putExtra("object_user_account", thirdRecommendAccountText.text)
                         context.startActivity(intent)
                     }

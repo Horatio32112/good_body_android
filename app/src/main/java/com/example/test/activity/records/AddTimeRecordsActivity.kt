@@ -1,4 +1,4 @@
-package com.example.test.activity.myRecords
+package com.example.test.activity.records
 
 import android.content.Context
 import android.content.Intent

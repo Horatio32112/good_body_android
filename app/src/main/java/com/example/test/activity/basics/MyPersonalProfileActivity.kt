@@ -11,9 +11,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
-import com.example.test.activity.interactionOfUsers.FindUserActivity
-import com.example.test.activity.myRecords.MySetsRecordsActivity
-import com.example.test.activity.myRecords.MyTimeRecordsActivity
+import com.example.test.activity.interactions.FindUserActivity
+import com.example.test.activity.records.MySetsRecordsActivity
+import com.example.test.activity.records.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.PersonalProfile

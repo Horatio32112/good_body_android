@@ -1,4 +1,4 @@
-package com.example.test.activity.interactionOfUsers
+package com.example.test.activity.interactions
 
 import android.content.Context
 import android.content.Intent
@@ -15,8 +15,8 @@ import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
-import com.example.test.activity.myRecords.MySetsRecordsActivity
-import com.example.test.activity.myRecords.MyTimeRecordsActivity
+import com.example.test.activity.records.MySetsRecordsActivity
+import com.example.test.activity.records.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
@@ -26,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserProfileActivity : AppCompatActivity() {
+class OtherUserProfileActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

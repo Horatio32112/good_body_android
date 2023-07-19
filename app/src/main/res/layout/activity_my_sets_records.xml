@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.myRecords.MySetsRecordsActivity">
+    tools:context=".activity.records.MySetsRecordsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_sets_records_RecyclerView"

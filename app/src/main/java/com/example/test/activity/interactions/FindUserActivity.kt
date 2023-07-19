@@ -1,4 +1,4 @@
-package com.example.test.activity.interactionOfUsers
+package com.example.test.activity.interactions
 
 import android.content.Context
 import android.content.Intent
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
-import com.example.test.activity.myRecords.MyTimeRecordsActivity
+import com.example.test.activity.records.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
@@ -62,7 +62,7 @@ class FindUserActivity : AppCompatActivity() {
                         val msg : String? = response.body()?.msg
 
                         if(msg=="User_exist"){
-                            val intent = Intent(context, UserProfileActivity::class.java)
+                            val intent = Intent(context, OtherUserProfileActivity::class.java)
                             intent.putExtra("object_user_account", accountInputField.text.toString())
 
                             context.startActivity(intent)

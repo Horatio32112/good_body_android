@@ -31,38 +31,38 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.myRecords.MySetsRecordsActivity"
+            android:name=".activity.records.MySetsRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.myRecords.MyTimeRecordsActivity"
+            android:name=".activity.records.MyTimeRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.myRecords.AddSetsRecordsActivity"
+            android:name=".activity.records.AddSetsRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.myRecords.AddTimeRecordsActivity"
+            android:name=".activity.records.AddTimeRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
 
         <activity
-            android:name=".activity.interactionOfUsers.FindUserActivity"
+            android:name=".activity.interactions.FindUserActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.interactionOfUsers.UserProfileActivity"
+            android:name=".activity.interactions.OtherUserProfileActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
