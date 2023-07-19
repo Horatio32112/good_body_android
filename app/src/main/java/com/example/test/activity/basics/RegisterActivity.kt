@@ -54,11 +54,11 @@ class RegisterActivity : AppCompatActivity() {
             val weight: Int = weightInput.text.toString().toInt()
             val age: Int = ageInput.text.toString().toInt()
 
-            if (account.isNullOrEmpty() ||
-                name.isNullOrEmpty() ||
-                email.isNullOrEmpty() ||
-                phoneNumber.isNullOrEmpty() ||
-                password.isNullOrEmpty()
+            if (account.isEmpty() ||
+                name.isEmpty() ||
+                email.isEmpty() ||
+                phoneNumber.isEmpty() ||
+                password.isEmpty()
             ) {
                 TODO("warn about empty blanks")
             } else {

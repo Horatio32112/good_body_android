@@ -21,6 +21,7 @@ import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
 import com.example.test.model.OperationMsg
+import com.example.test.model.Record
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,7 +41,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.user_profile_RecycleView)
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
-        var records: List<Any>?
+        var records: List<Record>?
         var followBtnStatus = "null"
 
         accountField.text = objectUserAccount

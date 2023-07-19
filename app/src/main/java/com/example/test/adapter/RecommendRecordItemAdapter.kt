@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
+import com.example.test.model.Record
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 
-class RecommendRecordItemAdapter(private val dataset: List<Any?>?) :
+class RecommendRecordItemAdapter(private val dataset: List<Record>?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class SetsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val accountField: TextView = view.findViewById(R.id.recom_sets_AccountText)

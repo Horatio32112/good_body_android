@@ -21,6 +21,7 @@ import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
 import com.example.test.model.RecommendFollowers
+import com.example.test.model.Record
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 import kotlinx.coroutines.launch
@@ -47,7 +48,7 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getInt("user_id", -1)
 
-        var recommendedRecords: List<Any?>?
+        var recommendedRecords: List<Record>?
         val recyclerView = findViewById<RecyclerView>(R.id.home_RecycleView)
 
 

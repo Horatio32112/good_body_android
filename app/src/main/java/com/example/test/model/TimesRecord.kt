@@ -1,12 +1,12 @@
 package com.example.test.model
 
 data class TimesRecord(
-    val user_id: Int,
-    val contents: String,
+    override val user_id: Int,
+    override val contents: String,
     val duration:Int,
     val distance:Float,
-    val record_id:Int,
-    val account:String,
-    val created_at:String
+    override val record_id:Int,
+    override val account:String,
+    override val created_at:String
 
-)
+):Record
