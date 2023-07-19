@@ -42,7 +42,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
         var records: List<Record>?
-        var followBtnStatus = "null"
+        var isFollowing = false
 
         accountField.text = objectUserAccount
 
@@ -53,25 +53,25 @@ class OtherUserProfileActivity : AppCompatActivity() {
         }
 
         fun setUpFollowBtn() {
-            if (followBtnStatus == "following") {
+            if (isFollowing) {
                 followButton.text = "Unfollow"
                 followButton.setOnClickListener {
 
                     lifecycleScope.launch {
                         Datasource().unFollow(account, objectUserAccount)
-                        followBtnStatus = "not_following"
+                        isFollowing = false
                         setUpFollowBtn()
                         Log.d("header ", "status changed")
                     }
 
                 }
-            } else if (followBtnStatus == "not_following") {
+            } else if (!isFollowing) {
                 followButton.text = "Follow"
                 followButton.setOnClickListener {
 
                     lifecycleScope.launch {
                         Datasource().follow(account, objectUserAccount)
-                        followBtnStatus = "following"
+                        isFollowing = true
                         setUpFollowBtn()
                         Log.d("header ", "status changed")
                     }
@@ -96,9 +96,18 @@ class OtherUserProfileActivity : AppCompatActivity() {
                     //API回傳結果
                     val followStatus: String? = response.body()?.Msg
                     Log.d("header ", "$followStatus")
-                    if (followStatus == "following" || followStatus == "not_following") {
-                        followBtnStatus = followStatus
-                        setUpFollowBtn()
+                    when (followStatus) {
+                        "following" -> {
+                            isFollowing = true
+                            setUpFollowBtn()
+                        }
+                        "not_following" -> {
+                            isFollowing = false
+                            setUpFollowBtn()
+                        }
+                        else -> {
+                            Log.d("header ", "follow status check went wrong")
+                        }
                     }
 
                     Log.d("header ", "$account checked follow status of $objectUserAccount")

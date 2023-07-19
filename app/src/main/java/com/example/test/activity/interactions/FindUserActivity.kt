@@ -59,21 +59,24 @@ class FindUserActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        val msg : String? = response.body()?.Msg
 
-                        if(msg=="User_exist"){
-                            val intent = Intent(context, OtherUserProfileActivity::class.java)
-                            intent.putExtra("object_user_account", accountInputField.text.toString())
+                        when (response.body()?.Msg) {
+                            "User_exist" -> {
+                                val intent = Intent(context, OtherUserProfileActivity::class.java)
+                                intent.putExtra("object_user_account", accountInputField.text.toString())
 
-                            context.startActivity(intent)
+                                context.startActivity(intent)
 
-                            Log.d("header ", "user ${accountInputField.text} exists")
-                        }else if(msg=="User_not_exist"){
-                            val toast = Toast.makeText(context, "user not exist", Toast.LENGTH_SHORT)
-                            toast.show()
-                        }else{
-                            val toast = Toast.makeText(context, "unknown problem occurred", Toast.LENGTH_SHORT)
-                            toast.show()
+                                Log.d("header ", "user ${accountInputField.text} exists")
+                            }
+                            "User_not_exist" -> {
+                                val toast = Toast.makeText(context, "user not exist", Toast.LENGTH_SHORT)
+                                toast.show()
+                            }
+                            else -> {
+                                val toast = Toast.makeText(context, "unknown problem occurred", Toast.LENGTH_SHORT)
+                                toast.show()
+                            }
                         }
 
 
