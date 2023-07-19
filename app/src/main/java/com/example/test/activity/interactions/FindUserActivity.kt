@@ -60,7 +60,7 @@ class FindUserActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         //API回傳結果
 
-                        when (response.body()?.Msg) {
+                        when (response.body()?.msg) {
                             "User_exist" -> {
                                 val intent = Intent(context, OtherUserProfileActivity::class.java)
                                 intent.putExtra("object_user_account", accountInputField.text.toString())

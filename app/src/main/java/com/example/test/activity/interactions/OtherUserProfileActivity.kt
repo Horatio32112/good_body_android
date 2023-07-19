@@ -41,7 +41,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.user_profile_RecycleView)
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
-        var records: List<Record>?
+        val records: MutableList<Record> = mutableListOf()
         var isFollowing = false
 
         accountField.text = objectUserAccount
@@ -94,7 +94,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     //API回傳結果
-                    val followStatus: String? = response.body()?.Msg
+                    val followStatus: String? = response.body()?.msg
                     Log.d("header ", "$followStatus")
                     when (followStatus) {
                         "following" -> {
@@ -131,8 +131,8 @@ class OtherUserProfileActivity : AppCompatActivity() {
             val setsData = Datasource().loadSetsRecords(objectUserAccount)
             val timeData = Datasource().loadTimesRecords(objectUserAccount)
 
-            records = setsData
-            timeData.forEach{records = records?.plus(it)}
+            records.clear()
+            records.addAll(setsData+timeData)
 
             Log.d("header ", "$records")
             recyclerView.adapter = RecommendRecordItemAdapter(records)

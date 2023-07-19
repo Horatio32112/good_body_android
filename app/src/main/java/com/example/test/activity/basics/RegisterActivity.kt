@@ -77,7 +77,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         if (response.isSuccessful) {
                             //API回傳結果
-                            val toast = Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
+                            val toast = Toast.makeText(context, response.body()?.msg, Toast.LENGTH_SHORT)
                             toast.show()
 
                             val getIdApiCaller = apiBuilder.getId(account)

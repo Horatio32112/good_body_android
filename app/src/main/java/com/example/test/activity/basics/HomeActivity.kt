@@ -22,8 +22,6 @@ import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
 import com.example.test.model.RecommendFollowers
 import com.example.test.model.Record
-import com.example.test.model.SetsRecord
-import com.example.test.model.TimesRecord
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getInt("user_id", -1)
 
-        var recommendedRecords: List<Record>?
+        val recommendedRecords: MutableList<Record> = mutableListOf()
         val recyclerView = findViewById<RecyclerView>(R.id.home_RecycleView)
 
 
@@ -105,17 +103,9 @@ class HomeActivity : AppCompatActivity() {
             val setsData = Datasource().recommendSetsRecords(userId)
             val timeData = Datasource().recommendTimesRecords(userId)
 
-            val recommendedSetsRecords = mutableListOf<SetsRecord>()
-            recommendedSetsRecords.clear()
-            recommendedSetsRecords.addAll(setsData)
 
-            val recommendedTimeRecords = mutableListOf<TimesRecord>()
-            recommendedTimeRecords.clear()
-            recommendedTimeRecords.addAll(timeData)
-
-            recommendedRecords = recommendedSetsRecords
-
-            recommendedTimeRecords.forEach{recommendedRecords = recommendedRecords?.plus(it)}
+            recommendedRecords.clear()
+            recommendedRecords.addAll(setsData+timeData)
 
             recyclerView.adapter = RecommendRecordItemAdapter(recommendedRecords)
             recyclerView.setHasFixedSize(true)
