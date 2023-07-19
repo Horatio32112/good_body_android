@@ -5,8 +5,10 @@ import com.example.test.model.PersonalProfile
 import com.example.test.model.RecommendFollowers
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
+import com.example.test.model.User
 import com.example.test.model.UserId
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -72,21 +74,10 @@ interface ApiV1 {
         @Field("account") account: String
     ): Call<PersonalProfile>
 
-    @FormUrlEncoded
+
     @POST("/v1/register_account")
-    fun registerAccount(
+    fun registerAccount(@Body user:User): Call<OperationMsg>
 
-        @Field("email") email: String,
-        @Field("password") password: String,
-        @Field("account") account: String,
-        @Field("phone_number") phone_number: String,
-        @Field("name") name: String,
-        @Field("age") age: Int,
-        @Field("height") height: Int,
-        @Field("weight") weight: Int,
-        @Field("gender") gender: String
-
-    ): Call<OperationMsg>
 
     @FormUrlEncoded
     @POST("/v1/update_personal_profile")

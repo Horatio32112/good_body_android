@@ -12,6 +12,7 @@ import com.example.test.R
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
+import com.example.test.model.User
 import com.example.test.model.UserId
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,19 +63,11 @@ class RegisterActivity : AppCompatActivity() {
             ) {
                 TODO("warn about empty blanks")
             } else {
+                val user= User(-1,email,password,account,phoneNumber,name,age,height,weight,gender)
+
                 val okHttpClient = ApiSetUp.createOkHttpClient()
                 val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val registerAccountApiCaller = apiBuilder.registerAccount(
-                    email,
-                    password,
-                    account,
-                    phoneNumber,
-                    name,
-                    age,
-                    height,
-                    weight,
-                    gender
-                )
+                val registerAccountApiCaller = apiBuilder.registerAccount(user)
                 registerAccountApiCaller.enqueue(object : Callback<OperationMsg> {
                     override fun onResponse(
                         call: Call<OperationMsg>,
@@ -84,8 +77,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         if (response.isSuccessful) {
                             //API回傳結果
-                            val toast =
-                                Toast.makeText(context, response.body()?.msg, Toast.LENGTH_SHORT)
+                            val toast = Toast.makeText(context, response.body()?.Msg, Toast.LENGTH_SHORT)
                             toast.show()
 
                             val getIdApiCaller = apiBuilder.getId(account)

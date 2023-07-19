@@ -94,7 +94,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     //API回傳結果
-                    val followStatus: String? = response.body()?.msg
+                    val followStatus: String? = response.body()?.Msg
                     Log.d("header ", "$followStatus")
                     if (followStatus == "following" || followStatus == "not_following") {
                         followBtnStatus = followStatus
