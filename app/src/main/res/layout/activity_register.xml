@@ -131,6 +131,7 @@
         app:layout_constraintBottom_toTopOf="@+id/register_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_gender_input_field"
         tools:ignore="HardcodedText" />
 
     <EditText
