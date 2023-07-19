@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toRegisterButton: Button = findViewById(R.id.to_register_button)
+        val goToRegisterPageButton: Button = findViewById(R.id.to_register_button)
         val loginButton: Button = findViewById(R.id.login_button)
         val button: Button = findViewById(R.id.button2)
         val accountInput: EditText = findViewById(R.id.register_account_input_field)
@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        toRegisterButton.setOnClickListener {
-            val context = toRegisterButton.context
+        goToRegisterPageButton.setOnClickListener {
+            val context = goToRegisterPageButton.context
             val intent = Intent(context, RegisterActivity::class.java)
             context.startActivity(intent)
         }

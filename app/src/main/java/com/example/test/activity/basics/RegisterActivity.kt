@@ -25,7 +25,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         val context: Context = this
         val registerButton: Button = findViewById(R.id.register_button)
-        val toLoginButton: Button = findViewById(R.id.register_to_login_button)
+        val goToLoginPageButton: Button = findViewById(R.id.register_to_login_button)
         val accountInput: EditText = findViewById(R.id.register_account_input_field)
         val passwordInput: EditText = findViewById(R.id.register_password_input_field)
         val emailInput: EditText = findViewById(R.id.register_email_input_field)
@@ -36,8 +36,8 @@ class RegisterActivity : AppCompatActivity() {
         val ageInput: EditText = findViewById(R.id.register_age_input_field)
         val phoneNumberInput: EditText = findViewById(R.id.register_phone_number_input_field)
 
-        toLoginButton.setOnClickListener {
-            val context = toLoginButton.context
+        goToLoginPageButton.setOnClickListener {
+            val context = goToLoginPageButton.context
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
         }
