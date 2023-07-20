@@ -1,6 +1,7 @@
 package com.example.test.data
 
 import android.util.Log
+import com.example.test.api.ApiException
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
@@ -70,21 +71,21 @@ class Datasource {
                         Log.d("header ", "$account got his own profile")
 
                     } else {
-                        val messenger = ProfileMessenger(null,"read failure")
-                        it.resumeWith(Result.success(messenger))
+                        it.resumeWith(Result.failure(ApiException.Read))
                         Log.d("header ", "$account failed to get his own profile")
                         // 處理 API 錯誤回應
                     }
                 }
 
                 override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
-                    val messenger = ProfileMessenger(null,"call failure")
-                    it.resumeWith(Result.success(messenger))
+                    it.resumeWith(Result.failure(ApiException.Call))
                     Log.d("header ", "$account failed to get his own profile")
                 }
             })
         }
     }
+
+    @Throws(ApiException::class)
     suspend fun updateProfile(account: String,profile: PersonalProfile): PersonalProfile? {
         return suspendCancellableCoroutine {
             val updateProfileApiCaller = apiBuilder.updateProfile(
@@ -109,14 +110,14 @@ class Datasource {
                         Log.d("header ", "$account updated his own profile")
 
                     } else {
-                        it.resumeWith(Result.success(null))
+                        it.resumeWith(Result.failure(ApiException.Read))
                         Log.d("header ", "$account failed to update his own profile")
                         // 處理 API 錯誤回應
                     }
                 }
 
                 override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
-                    it.resumeWith(Result.success(null))
+                    it.resumeWith(Result.failure(ApiException.Call))
                     Log.d("header ", "$account failed to update his own profile")
                 }
             })

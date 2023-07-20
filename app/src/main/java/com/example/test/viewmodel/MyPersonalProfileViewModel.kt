@@ -3,6 +3,7 @@ package com.example.test.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.test.api.ApiException
 import com.example.test.data.Datasource
 import com.example.test.model.PersonalProfile
 import kotlinx.coroutines.launch
@@ -16,11 +17,12 @@ class MyPersonalProfileViewModel : ViewModel() {
 
     fun getProfile(account: String) {
         viewModelScope.launch {
-            val data = Datasource().getProfile(account)
-            if(data.msg.isNullOrEmpty()){
+
+            try {
+                val data = Datasource().getProfile(account)
                 profileLiveData.postValue(data.profile)
-            }else{
-                msgLiveData.postValue(data.msg)
+            }catch (ex: ApiException){
+                msgLiveData.postValue(ex.message)
             }
 
         }
@@ -29,12 +31,14 @@ class MyPersonalProfileViewModel : ViewModel() {
     fun updateProfile(account: String, profile: PersonalProfile) {
         viewModelScope.launch {
 
-            val data = Datasource().updateProfile(account, profile)
-            if(data!=null){
+            try {
+                val data = Datasource().updateProfile(account, profile)
+
                 profileLiveData.postValue(data)
                 msgLiveData.postValue("update success")
-            }else{
-                msgLiveData.postValue("update failed")
+
+            } catch (ex: ApiException) {
+                msgLiveData.postValue(ex.message)
             }
 
         }
