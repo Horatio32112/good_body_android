@@ -51,6 +51,7 @@ class Datasource {
 
     }
 
+    @Throws(ApiException::class)
     suspend fun getProfile(account: String): ProfileMessenger {
         return suspendCancellableCoroutine {
             val getProfileApiCaller = apiBuilder.getProfile(account)
