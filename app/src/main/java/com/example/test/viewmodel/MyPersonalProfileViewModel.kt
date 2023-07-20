@@ -12,12 +12,17 @@ class MyPersonalProfileViewModel : ViewModel() {
     val profileLiveData = MutableLiveData<PersonalProfile?>(null)
     val context = this
     val showErrorDialog = MutableLiveData<String?>(null)
-    val showToast = MutableLiveData<String?>(null)
+    val msgLiveData = MutableLiveData<String?>(null)
 
     fun getProfile(account: String) {
         viewModelScope.launch {
             val data = Datasource().getProfile(account)
-            profileLiveData.postValue(data)
+            if(data.msg.isNullOrEmpty()){
+                profileLiveData.postValue(data.profile)
+            }else{
+                msgLiveData.postValue(data.msg)
+            }
+
         }
     }
 
@@ -25,8 +30,13 @@ class MyPersonalProfileViewModel : ViewModel() {
         viewModelScope.launch {
 
             val data = Datasource().updateProfile(account, profile)
+            if(data!=null){
+                profileLiveData.postValue(data)
+                msgLiveData.postValue("update success")
+            }else{
+                msgLiveData.postValue("update failed")
+            }
 
-            profileLiveData.postValue(data)
         }
     }
 }

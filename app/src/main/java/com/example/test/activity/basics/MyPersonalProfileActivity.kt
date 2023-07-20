@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
@@ -42,6 +43,12 @@ class MyPersonalProfileActivity : AppCompatActivity() {
             weightField.setText((data.weight).toString())
             ageField.setText((data.age).toString())
             genderField.setText(data.gender)
+        }
+
+        viewModel.msgLiveData.observe(this){msg ->
+            msg ?: return@observe
+            val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+            toast.show()
         }
 
 
