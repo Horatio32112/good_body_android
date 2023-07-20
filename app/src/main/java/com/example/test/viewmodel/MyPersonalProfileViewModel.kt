@@ -11,8 +11,6 @@ import kotlinx.coroutines.launch
 class MyPersonalProfileViewModel : ViewModel() {
 
     val profileLiveData = MutableLiveData<PersonalProfile?>(null)
-    val context = this
-    val showErrorDialog = MutableLiveData<String?>(null)
     val msgLiveData = MutableLiveData<String?>(null)
 
     fun getProfile(account: String) {
