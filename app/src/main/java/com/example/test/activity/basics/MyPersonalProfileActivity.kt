@@ -3,27 +3,22 @@ package com.example.test.activity.basics
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
 import com.example.test.activity.interactions.FindUserActivity
 import com.example.test.activity.records.MySetsRecordsActivity
 import com.example.test.activity.records.MyTimeRecordsActivity
-import com.example.test.api.ApiSetUp
-import com.example.test.api.ApiV1
+import com.example.test.viewmodel.MyPersonalProfileViewModel
 import com.example.test.model.PersonalProfile
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MyPersonalProfileActivity : AppCompatActivity() {
 
-
+    private val viewModel by viewModels<MyPersonalProfileViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_personal_profile)
@@ -39,14 +34,16 @@ class MyPersonalProfileActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
 
+        viewModel.getProfile(account.toString())
 
-        fun setTextByResponse(response: PersonalProfile) {
-            heightField.setText(response.height.toString())
-            weightField.setText(response.weight.toString())
-            ageField.setText(response.age.toString())
-            genderField.setText(response.gender)
+        viewModel.profileLiveData.observe(this) { data ->
+            heightField.setText((data?.height ?: 0).toString())
+            weightField.setText((data?.weight ?: 0).toString())
+            ageField.setText((data?.age ?: 0).toString())
+            genderField.setText(data?.gender ?: "unknown")
         }
 
+/**
         val okHttpClient = ApiSetUp.createOkHttpClient()
         val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
         val getProfileApiCaller = apiBuilder.getProfile(account.toString())
@@ -74,8 +71,13 @@ class MyPersonalProfileActivity : AppCompatActivity() {
                 Log.d("header ", "$account failed to get his own profile")
             }
         })
-
+*/
         updateButton.setOnClickListener {
+            val profile = PersonalProfile(ageField.text.toString().toInt(),heightField.text.toString().toInt(),weightField.text.toString().toInt(),genderField.text.toString())
+            viewModel.updateProfile(account.toString(),profile)
+
+
+            /**
             val updateProfileApiCaller = apiBuilder.updateProfile(
                 account.toString(),
                 heightField.text.toString().toInt(),
@@ -110,6 +112,7 @@ class MyPersonalProfileActivity : AppCompatActivity() {
                     Log.d("header ", "$account failed to update his own profile")
                 }
             })
+            */
         }
         backHomeButton.setOnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
