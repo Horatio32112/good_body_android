@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
+import com.example.test.model.PersonalProfile
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -48,6 +49,77 @@ class Datasource {
 
     }
 
+    suspend fun getProfile(account: String): PersonalProfile? {
+        return suspendCancellableCoroutine {
+            val getProfileApiCaller = apiBuilder.getProfile(account)
+            getProfileApiCaller.enqueue(object : Callback<PersonalProfile> {
+                override fun onResponse(
+                    call: Call<PersonalProfile>,
+                    response: Response<PersonalProfile>
+                ) {
+                    Log.d("header ", "test ${Thread.currentThread()}")
+
+                    if (response.isSuccessful) {
+                        //API回傳結果
+
+                        val response = response.body()
+                        it.resumeWith(Result.success(response))
+
+
+                        Log.d("header ", "$account got his own profile")
+
+                    } else {
+                        Log.d("header ", "$account failed to get his own profile")
+                        // 處理 API 錯誤回應
+                    }
+                }
+
+                override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
+                    Log.d("header ", "$account failed to get his own profile")
+                }
+            })
+
+        }
+
+    }
+    suspend fun updateProfile(account: String,profile: PersonalProfile): PersonalProfile? {
+        return suspendCancellableCoroutine {
+            val updateProfileApiCaller = apiBuilder.updateProfile(
+                account,
+                profile.height,
+                profile.weight,
+                profile.age,
+                profile.gender
+            )
+            updateProfileApiCaller.enqueue(object : Callback<PersonalProfile> {
+                override fun onResponse(
+                    call: Call<PersonalProfile>,
+                    response: Response<PersonalProfile>
+                ) {
+                    Log.d("header ", "test ${Thread.currentThread()}")
+
+                    if (response.isSuccessful) {
+                        //API回傳結果
+                        val response = response.body()
+                        it.resumeWith(Result.success(response))
+                    /**
+                        val toast = Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT)
+                        toast.show()
+                    */
+                        Log.d("header ", "$account updated his own profile")
+
+                    } else {
+                        Log.d("header ", "$account failed to update his own profile")
+                        // 處理 API 錯誤回應
+                    }
+                }
+
+                override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
+                    Log.d("header ", "$account failed to update his own profile")
+                }
+            })
+        }
+    }
     suspend fun loadTimesRecords(account: String): List<TimesRecord> {
         return suspendCancellableCoroutine {
             val retrofitData1 = apiBuilder.getTimesRecords(account)
