@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activity.Basics.HomeActivity">
+    tools:context=".activity.basics.HomeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_RecycleView"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/home_recommend_follow_Text1"
+            android:id="@+id/home_recommend_follow_FirstText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="78dp"
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/home_recommend_CheckOutBtn1"
+            android:id="@+id/home_recommend_FirstCheckOutBtn"
             android:layout_width="87dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toEndOf="@+id/constraintLayout">
 
         <TextView
-            android:id="@+id/home_recommend_follow_Text2"
+            android:id="@+id/home_recommend_follow_SecondText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -65,7 +65,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/home_recommend_CheckOutBtn2"
+            android:id="@+id/home_recommend_SecondCheckOutBtn"
             android:layout_width="87dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"
@@ -84,7 +84,7 @@
         app:layout_constraintStart_toEndOf="@+id/constraintLayout2">
 
         <TextView
-            android:id="@+id/home_recommend_follow_Text3"
+            android:id="@+id/home_recommend_follow_ThirdText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/home_recommend_CheckOutBtn3"
+            android:id="@+id/home_recommend_ThirdCheckOutBtn"
             android:layout_width="87dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"

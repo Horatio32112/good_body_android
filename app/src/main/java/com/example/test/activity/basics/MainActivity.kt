@@ -1,4 +1,4 @@
-package com.example.test.activity.Basics
+package com.example.test.activity.basics
 
 import android.content.Context
 import android.content.Intent
@@ -23,11 +23,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val to_register_button: Button = findViewById(R.id.to_register_button)
-        val login_button: Button = findViewById(R.id.login_button)
+        val goToRegisterPageButton: Button = findViewById(R.id.to_register_button)
+        val loginButton: Button = findViewById(R.id.login_button)
         val button: Button = findViewById(R.id.button2)
-        val account_input: EditText = findViewById(R.id.register_account_input_field)
-        val password_input: EditText = findViewById(R.id.register_password_input_field)
+        val accountInput: EditText = findViewById(R.id.register_account_input_field)
+        val passwordInput: EditText = findViewById(R.id.register_password_input_field)
 
 
         button.setOnClickListener {
@@ -36,30 +36,29 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        to_register_button.setOnClickListener {
-            val context = to_register_button.context
+        goToRegisterPageButton.setOnClickListener {
+            val context = goToRegisterPageButton.context
             val intent = Intent(context, RegisterActivity::class.java)
             context.startActivity(intent)
         }
 
-        login_button.setOnClickListener {
+        loginButton.setOnClickListener {
 
-            val account: String = account_input.getText().toString()
-            val password: String = password_input.getText().toString()
+            val account: String = accountInput.text.toString()
+            val password: String = passwordInput.text.toString()
             val context: Context = this
             if (TextUtils.isEmpty(account)) {
-                account_input.setError("This block cannot be blank")
+                accountInput.error="This block cannot be blank"
 
             } else if (TextUtils.isEmpty(password)) {
-                password_input.setError("This block cannot be blank")
+                passwordInput.error="This block cannot be blank"
 
             } else {
 
-
                 val okHttpClient = ApiSetUp.createOkHttpClient()
-                var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                var retrofitData1 = retrofitBuilder1.get_id(account)
-                retrofitData1.enqueue(object : Callback<UserId> {
+                val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+                val apiCaller = apiBuilder.getId(account)
+                apiCaller.enqueue(object : Callback<UserId> {
                     override fun onResponse(
                         call: Call<UserId>,
                         response: Response<UserId>
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
                         if (response.isSuccessful) {
                             //API回傳結果
-                            var user_id : Int? = response.body()?.user_id
+                            val userId : Int? = response.body()?.user_id
 
                             val toast = Toast.makeText(context, "info_submitted", Toast.LENGTH_SHORT)
                             toast.show()
@@ -77,14 +76,14 @@ class MainActivity : AppCompatActivity() {
                             val editor = sharedPreferences.edit()
                             editor.putString("account", account)
 
-                            user_id?.let { it1 -> editor.putInt("user_id", it1) }
+                            userId?.let { id -> editor.putInt("user_id", id) }
                             editor.apply()
 
                             val intent = Intent(context, HomeActivity::class.java)
                             context.startActivity(intent)
 
-                            Log.d("header ", "user exists, id = ${user_id}")
-                            Log.d("header ", "${account} logged in.")
+                            Log.d("header ", "user exists, id = $userId")
+                            Log.d("header ", "$account logged in.")
 
                         } else {
                             Log.d("header ", "user not exist or something went wrong")
@@ -97,20 +96,6 @@ class MainActivity : AppCompatActivity() {
 
                 })
 
-
-
-        /**
-                val context: Context = this
-                val toast = Toast.makeText(this, "info_submitted", Toast.LENGTH_SHORT)
-                toast.show()
-
-
-
-                val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putString("account", account)
-                editor.apply()
-            */
             }
         }
     }

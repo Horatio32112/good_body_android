@@ -19,60 +19,60 @@
 
         tools:targetApi="31" >
         <activity
-            android:name=".activity.Basics.HomeActivity"
+            android:name=".activity.basics.HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
              />
         <activity
-            android:name=".activity.Basics.MyPersonalProfileActivity"
+            android:name=".activity.basics.MyPersonalProfileActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.MyRecords.MySetsRecordsActivity"
+            android:name=".activity.records.MySetsRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.MyRecords.MyTimeRecordsActivity"
+            android:name=".activity.records.MyTimeRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.MyRecords.AddSetsRecordsActivity"
+            android:name=".activity.records.AddSetsRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.MyRecords.AddTimeRecordsActivity"
+            android:name=".activity.records.AddTimeRecordsActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
 
         <activity
-            android:name=".activity.InteractionOfUsers.FindUserActivity"
+            android:name=".activity.interactions.FindUserActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.InteractionOfUsers.UserProfileActivity"
+            android:name=".activity.interactions.OtherUserProfileActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             />
         <activity
-            android:name=".activity.Basics.RegisterActivity"
+            android:name=".activity.basics.RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".activity.Basics.MainActivity"
+            android:name=".activity.basics.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

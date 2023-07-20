@@ -1,4 +1,4 @@
-package com.example.test.activity.MyRecords
+package com.example.test.activity.records
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
-import com.example.test.activity.Basics.HomeActivity
+import com.example.test.activity.basics.HomeActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
@@ -37,12 +37,12 @@ class AddTimeRecordsActivity: AppCompatActivity() {
             val duration:Int=durationField.text.toString().toInt()
             val distance=distanceField.text.toString().toFloat()
             val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
-            val user_id = sharedPreferences.getInt("user_id", -1)
+            val userId = sharedPreferences.getInt("user_id", -1)
 
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            var retrofitData1 = retrofitBuilder1.create_time_records(user_id,content,duration, distance)
-            retrofitData1.enqueue(object : Callback<OperationMsg> {
+            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+            val apiCaller = apiBuilder.createTimeRecords(userId,content,duration, distance)
+            apiCaller.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>
@@ -52,10 +52,10 @@ class AddTimeRecordsActivity: AppCompatActivity() {
                     if (response.isSuccessful) {
                         val intent = Intent(context, HomeActivity::class.java)
                         context.startActivity(intent)
-                        Log.d("header ", "user_id ${user_id} created a time record")
+                        Log.d("header ", "user_id $userId created a time record")
 
                     } else {
-                        Log.d("header ", "user_id ${user_id} failed to created a time record\"")
+                        Log.d("header ", "user_id $userId failed to created a time record\"")
                         // 處理 API 錯誤回應
                     }
                 }

@@ -1,4 +1,4 @@
-package com.example.test.activity.InteractionOfUsers
+package com.example.test.activity.interactions
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.R
-import com.example.test.activity.Basics.HomeActivity
-import com.example.test.activity.Basics.MyPersonalProfileActivity
-import com.example.test.activity.MyRecords.MyTimeRecordsActivity
+import com.example.test.activity.basics.HomeActivity
+import com.example.test.activity.basics.MyPersonalProfileActivity
+import com.example.test.activity.records.MyTimeRecordsActivity
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.model.OperationMsg
@@ -27,9 +27,9 @@ class FindUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_user)
-        val SearchBtn: Button =findViewById(R.id.find_user_SearchBtn)
+        val searchBtn: Button =findViewById(R.id.find_user_SearchBtn)
         val homeBtn: Button =findViewById(R.id.find_user_BackHomeBtn)
-        val AccountInputField: TextView =findViewById(R.id.find_user_AccountInput)
+        val accountInputField: TextView =findViewById(R.id.find_user_AccountInput)
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
@@ -41,16 +41,16 @@ class FindUserActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        SearchBtn.setOnClickListener {
-            if(AccountInputField.text.toString()==account){
+        searchBtn.setOnClickListener {
+            if(accountInputField.text.toString()==account){
                 val toast = Toast.makeText(context, "you can't search for yourself", Toast.LENGTH_SHORT)
                 toast.show()
             }
             else{
             val okHttpClient = ApiSetUp.createOkHttpClient()
-            var retrofitBuilder1 = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            var retrofitData1 = retrofitBuilder1.check_user_existence(AccountInputField.text.toString())
-            retrofitData1.enqueue(object : Callback<OperationMsg> {
+            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
+            val apiCaller = apiBuilder.checkUserExistence(accountInputField.text.toString())
+            apiCaller.enqueue(object : Callback<OperationMsg> {
                 override fun onResponse(
                     call: Call<OperationMsg>,
                     response: Response<OperationMsg>
@@ -59,21 +59,24 @@ class FindUserActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         //API回傳結果
-                        var Msg : String? = response.body()?.Msg
 
-                        if(Msg=="User_exist"){
-                            val intent = Intent(context, UserProfileActivity::class.java)
-                            intent.putExtra("object_user_account", AccountInputField.text.toString())
+                        when (response.body()?.msg) {
+                            "User_exist" -> {
+                                val intent = Intent(context, OtherUserProfileActivity::class.java)
+                                intent.putExtra("object_user_account", accountInputField.text.toString())
 
-                            context.startActivity(intent)
+                                context.startActivity(intent)
 
-                            Log.d("header ", "user ${AccountInputField.text} exists")
-                        }else if(Msg=="User_not_exist"){
-                            val toast = Toast.makeText(context, "user not exist", Toast.LENGTH_SHORT)
-                            toast.show()
-                        }else{
-                            val toast = Toast.makeText(context, "unknown problem occurred", Toast.LENGTH_SHORT)
-                            toast.show()
+                                Log.d("header ", "user ${accountInputField.text} exists")
+                            }
+                            "User_not_exist" -> {
+                                val toast = Toast.makeText(context, "user not exist", Toast.LENGTH_SHORT)
+                                toast.show()
+                            }
+                            else -> {
+                                val toast = Toast.makeText(context, "unknown problem occurred", Toast.LENGTH_SHORT)
+                                toast.show()
+                            }
                         }
 
 

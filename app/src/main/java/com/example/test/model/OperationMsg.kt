@@ -1,6 +1,10 @@
 package com.example.test.model
 
+import com.google.gson.annotations.SerializedName
+
 data class OperationMsg(
-    var Msg:String
+    @SerializedName("Msg")
+    var msg:String,
+
     ){
 }
