@@ -76,7 +76,7 @@ interface ApiV1 {
 
 
     @POST("/v1/register_account")
-    fun registerAccount(@Body user:User): Call<OperationMsg>
+    fun registerAccount(@Body user:User): Call<UserId>
 
 
     @FormUrlEncoded

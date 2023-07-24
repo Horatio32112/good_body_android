@@ -9,6 +9,8 @@ import com.example.test.model.PersonalProfile
 import com.example.test.model.ProfileMessenger
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
+import com.example.test.model.User
+import com.example.test.model.UserId
 import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,6 +53,39 @@ class Datasource {
 
     }
 
+    @Throws(ApiException::class)
+    suspend fun register(user: User): Int? {
+        return suspendCancellableCoroutine {
+            val registerAccountApiCaller = apiBuilder.registerAccount(user)
+            registerAccountApiCaller.enqueue(object : Callback<UserId> {
+                override fun onResponse(
+                    call: Call<UserId>,
+                    response: Response<UserId>
+                ) {
+                    Log.d("header ", "test ${Thread.currentThread()}")
+
+                    if (response.isSuccessful) {
+                        try {
+                            it.resumeWith(Result.success(response.body()?.user_id))
+                        }catch (ex: ApiException){
+                        }
+
+
+                    } else {
+                        it.resumeWith(Result.failure(ApiException.Read))
+                        Log.d("header ", "something went wrong when registering")
+                        // 處理 API 錯誤回應
+                    }
+                }
+
+                override fun onFailure(call: Call<UserId>, t: Throwable) {
+                    it.resumeWith(Result.failure(ApiException.Call))
+                    Log.d("header ", "RegisterAccountApi call failed")
+                }
+
+            })
+        }
+    }
     @Throws(ApiException::class)
     suspend fun getProfile(account: String): ProfileMessenger {
         return suspendCancellableCoroutine {
