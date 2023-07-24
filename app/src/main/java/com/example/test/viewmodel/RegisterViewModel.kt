@@ -8,8 +8,8 @@ import com.example.test.data.Datasource
 import com.example.test.model.User
 import kotlinx.coroutines.launch
 
+
 class RegisterViewModel : ViewModel() {
-    val context = this
     val msgLiveData = MutableLiveData<String?>(null)
     val idLiveData = MutableLiveData<Int?>(null)
 
@@ -19,13 +19,9 @@ class RegisterViewModel : ViewModel() {
             try {
                 val userId = Datasource().register(user)
                 idLiveData.postValue(userId)
-
-
             } catch (ex: ApiException) {
                 msgLiveData.postValue(ex.message)
             }
-
-
         }
     }
 }

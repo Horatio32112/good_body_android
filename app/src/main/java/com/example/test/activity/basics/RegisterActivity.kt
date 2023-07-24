@@ -32,6 +32,31 @@ class RegisterActivity : AppCompatActivity() {
         val ageInput: EditText = findViewById(R.id.register_age_input_field)
         val phoneNumberInput: EditText = findViewById(R.id.register_phone_number_input_field)
 
+        val sharedPreferences = context.getSharedPreferences(
+            "account_info",
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+
+        viewModel.idLiveData.observe(this) { userId ->
+            userId ?: return@observe
+            editor.putInt("user_id", userId)
+            editor.apply()
+
+            val toast = Toast.makeText(context, "register succeed $userId", Toast.LENGTH_SHORT)
+            toast.show()
+
+            val intent = Intent(context, HomeActivity::class.java)
+            context.startActivity(intent)
+
+        }
+
+        viewModel.msgLiveData.observe(this) { msg ->
+            msg ?: return@observe
+            val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+
         goToLoginPageButton.setOnClickListener {
             val context = goToLoginPageButton.context
             val intent = Intent(context, MainActivity::class.java)
@@ -40,8 +65,7 @@ class RegisterActivity : AppCompatActivity() {
 
 
         registerButton.setOnClickListener {
-
-            val account: String = accountInput.text.toString()
+            val account = accountInput.text.toString()
             val password: String = passwordInput.text.toString()
             val name: String = nameInput.text.toString()
             val phoneNumber: String = phoneNumberInput.text.toString()
@@ -61,8 +85,7 @@ class RegisterActivity : AppCompatActivity() {
                 toast.show()
             } else {
                 val user = User(
-                    -1,
-                    email,
+                    email = email,
                     password,
                     account,
                     phoneNumber,
@@ -72,33 +95,10 @@ class RegisterActivity : AppCompatActivity() {
                     weight,
                     gender
                 )
+
+                editor.putString("account", account)
                 viewModel.register(user)
-                viewModel.idLiveData.observe(this) { userId ->
-                    userId ?: return@observe
-                    if(userId!=null) {
-                        val toast =
-                            Toast.makeText(context, "register succeed $userId", Toast.LENGTH_SHORT)
-                        toast.show()
 
-                        val sharedPreferences = context.getSharedPreferences(
-                            "account_info",
-                            Context.MODE_PRIVATE
-                        )
-                        val editor = sharedPreferences.edit()
-                        editor.putString("account", account)
-                        userId.let { userId -> editor.putInt("user_id", userId) }
-                        editor.apply()
-
-                        val intent = Intent(context, HomeActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                }
-
-                viewModel.msgLiveData.observe(this) { msg ->
-                    msg ?: return@observe
-                    val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
-                    toast.show()
-                }
             }
         }
 
