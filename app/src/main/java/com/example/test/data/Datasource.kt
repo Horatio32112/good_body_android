@@ -283,35 +283,21 @@ class Datasource {
     }
 
     suspend fun follow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
-        return suspendCancellableCoroutine {
-            val retrofitData1 = apiBuilder.follow(SubjectUserAccount, ObjectUserAccount)
-            retrofitData1.enqueue(object : Callback<OperationMsg> {
-                override fun onResponse(
-                    call: Call<OperationMsg>,
-                    response: Response<OperationMsg>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        //API回傳結果
-                        val response = response.body() ?: OperationMsg("")
-                        it.resumeWith(Result.success(response))
-
-                        Log.d("header ", "$SubjectUserAccount followed $ObjectUserAccount")
-
-                    } else {
-                        Log.d("header ", "$SubjectUserAccount failed to follow $ObjectUserAccount")
-                        // 處理 API 錯誤回應
-                        it.resumeWith(Result.failure(Exception()))
-                    }
+        val action: (response:Response<OperationMsg>,it: CancellableContinuation<OperationMsg>) -> Result<OperationMsg> = { response,it ->
+            val body = response.body()
+            if (response.isSuccessful) {
+                //API回傳結果
+                if(body==null){
+                    Result.success(OperationMsg(""))
+                }else{
+                    Result.success(body)
                 }
-
-                override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
-                    Log.d("header ", "FollowApi call failed")
-                    it.resumeWith(Result.failure(Exception()))
-                }
-            })
+            } else {
+                Result.failure(ApiException.Read)
+                // 處理 API 錯誤回應
+            }
         }
+        return callApi ({ apiBuilder.follow(SubjectUserAccount, ObjectUserAccount)},action)
     }
 
     suspend fun unFollow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
