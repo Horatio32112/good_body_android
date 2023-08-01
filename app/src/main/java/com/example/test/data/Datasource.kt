@@ -317,11 +317,11 @@ class Datasource {
     suspend fun unFollow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
 
         val action: (response:Response<OperationMsg>,it: CancellableContinuation<OperationMsg>) -> Result<OperationMsg> = { response,it ->
-            if (response.isSuccessful) ({
+            val body = response.body()
+            if (response.isSuccessful&&body!=null) {
                 //API回傳結果
-                val body = response.body()
                 Result.success(body)
-            }) as Result<OperationMsg> else {
+            } else {
                 Result.failure(ApiException.Read)
                 // 處理 API 錯誤回應
             }
