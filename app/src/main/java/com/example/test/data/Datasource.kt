@@ -21,113 +21,61 @@ class Datasource {
     private val client = ApiSetUp.createOkHttpClient()
     private val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(client)
     suspend fun loadSetsRecords(account: String): List<SetsRecord> {
-        return suspendCancellableCoroutine {
-            val retrofitData1 = apiBuilder.getSetsRecords(account)
-            retrofitData1.enqueue(object : Callback<List<SetsRecord>> {
-                override fun onResponse(
-                    call: Call<List<SetsRecord>>,
-                    response: Response<List<SetsRecord>>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        //API回傳結果
-
-                        val response = response.body() ?: listOf()
-                        it.resumeWith(Result.success(response))
-
-                        Log.d("header ", "$account got his own sets records")
-
-                    } else {
-                        Log.d("header ", "$account failed to get his sets records")
-                        // 處理 API 錯誤回應
-                        it.resumeWith(Result.failure(Exception()))
+        val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful) {
+                    //API回傳結果
+                    if(body==null){
+                        Result.success(listOf())
+                    }else{
+                        Result.success(body)
                     }
-                }
 
-                override fun onFailure(call: Call<List<SetsRecord>>, t: Throwable) {
-                    Log.d("header ", "GetSetsRecordsApi call failed")
-                    it.resumeWith(Result.failure(Exception()))
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-            })
-        }
-
+            }
+        return callApi({ apiBuilder.getSetsRecords(account) }, action)
     }
 
     @Throws(ApiException::class)
-    suspend fun register(user: User): Int? {
-        return suspendCancellableCoroutine {
-            val registerAccountApiCaller = apiBuilder.registerAccount(user)
-            registerAccountApiCaller.enqueue(object : Callback<UserId> {
-                override fun onResponse(
-                    call: Call<UserId>,
-                    response: Response<UserId>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        try {
-                            it.resumeWith(Result.success(response.body()?.user_id))
-                        } catch (ex: ApiException) {
-                        }
-
-
-                    } else {
-                        it.resumeWith(Result.failure(ApiException.Read))
-                        Log.d("header ", "something went wrong when registering")
-                        // 處理 API 錯誤回應
-                    }
+    suspend fun register(user: User): Int {
+        val action: (response: Response<UserId>) -> Result<Int> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful&&body!=null){
+                    Result.success(body.user_id)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-
-                override fun onFailure(call: Call<UserId>, t: Throwable) {
-                    it.resumeWith(Result.failure(ApiException.Call))
-                    Log.d("header ", "RegisterAccountApi call failed")
-                }
-
-            })
-        }
+            }
+        return callApi({ apiBuilder.registerAccount(user) }, action)
     }
 
     @Throws(ApiException::class)
     suspend fun getProfile(account: String): ProfileMessenger {
-        return suspendCancellableCoroutine {
-            val getProfileApiCaller = apiBuilder.getProfile(account)
-            getProfileApiCaller.enqueue(object : Callback<PersonalProfile> {
-                override fun onResponse(
-                    call: Call<PersonalProfile>,
-                    response: Response<PersonalProfile>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        //API回傳結果
-
-                        val response = response.body()
-                        val messenger = ProfileMessenger(response, null)
-                        it.resumeWith(Result.success(messenger))
-
-                        Log.d("header ", "$account got his own profile")
-
-                    } else {
-                        it.resumeWith(Result.failure(ApiException.Read))
-                        Log.d("header ", "$account failed to get his own profile")
-                        // 處理 API 錯誤回應
-                    }
+        val action: (response: Response<PersonalProfile>) -> Result<ProfileMessenger> =
+            { response ->
+                if (response.isSuccessful){
+                    val body = response.body()
+                    val messenger = ProfileMessenger(body, null)
+                    Result.success(messenger)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-
-                override fun onFailure(call: Call<PersonalProfile>, t: Throwable) {
-                    it.resumeWith(Result.failure(ApiException.Call))
-                    Log.d("header ", "$account failed to get his own profile")
-                }
-            })
-        }
+            }
+        return callApi({ apiBuilder.getProfile(account) }, action)
     }
 
     @Throws(ApiException::class)
     suspend fun updateProfile(account: String, profile: PersonalProfile): PersonalProfile {
-        val action: (Response<PersonalProfile>, CancellableContinuation<PersonalProfile>) -> Result<PersonalProfile> = { response, it ->
+        val action: (Response<PersonalProfile>) -> Result<PersonalProfile> = { response ->
             val body = response.body()
-            if (response.isSuccessful&&body!=null) {
+            if (response.isSuccessful && body != null) {
                 //API回傳結果
                 Result.success(body)
             } else {
@@ -136,35 +84,48 @@ class Datasource {
             }
         }
 
-        return callApi({apiBuilder.updateProfile(
-            account,
-            profile.height,
-            profile.weight,
-            profile.age,
-            profile.gender
-        )},action )
-
-
+        return callApi({
+            apiBuilder.updateProfile(
+                account,
+                profile.height,
+                profile.weight,
+                profile.age,
+                profile.gender
+            )
+        }, action)
     }
 
-    private fun <T> callAction(response:Response<T>,it: CancellableContinuation<T>,action: (response:Response<T>,it: CancellableContinuation<T>) -> Result<T>) :Result<T>{
-        return action(response,it)
+    private fun <T, R> callAction(
+        response: Response<T>,
+        action: (response: Response<T>) -> Result<R>
+    ): Result<R> {
+        return action(response)
     }
 
-    private suspend fun <T> callApi(initApiCaller: () -> Call<T>,parseResponse: (response:Response<T>,it: CancellableContinuation<T>) -> Result<T>): T {
+    private suspend fun <T, R> callApi(
+        initApiCaller: () -> Call<T>,
+        parseResponse: (
+            response: Response<T>
+        ) -> Result<R>
+    ): R {
         return suspendCancellableCoroutine {
             val apiCaller = initApiCaller()
-            enqueueApi(apiCaller,it,parseResponse)
+            enqueueApi(apiCaller, it, parseResponse)
         }
     }
-    private fun <T> enqueueApi(apiCaller: Call<T>, it: CancellableContinuation<T>,parseResponse: (response:Response<T>,it: CancellableContinuation<T>) -> Result<T>) {
+
+    private fun <T, R> enqueueApi(
+        apiCaller: Call<T>,
+        it: CancellableContinuation<R>,
+        parseResponse: (response: Response<T>) -> Result<R>
+    ) {
         apiCaller.enqueue(object : Callback<T> {
             override fun onResponse(
                 call: Call<T>,
                 response: Response<T>
             ) {
                 Log.d("header ", "test ${Thread.currentThread()}")
-                it.resumeWith(callAction(response,it,parseResponse))
+                it.resumeWith(callAction(response, parseResponse))
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
@@ -176,142 +137,94 @@ class Datasource {
 
 
     suspend fun loadTimesRecords(account: String): List<TimesRecord> {
-        return suspendCancellableCoroutine {
-            val retrofitData1 = apiBuilder.getTimesRecords(account)
-            retrofitData1.enqueue(object : Callback<List<TimesRecord>> {
-                override fun onResponse(
-                    call: Call<List<TimesRecord>>,
-                    response: Response<List<TimesRecord>>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        //API回傳結果
-
-                        val response = response.body() ?: listOf()
-                        it.resumeWith(Result.success(response))
-
-                        Log.d("header ", "$account got his own time records")
-
-                    } else {
-                        Log.d("header ", "$account failed to get his time records")
-                        // 處理 API 錯誤回應
-                        it.resumeWith(Result.failure(Exception()))
+        val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful) {
+                    //API回傳結果
+                    if(body==null){
+                        Result.success(listOf())
+                    }else{
+                        Result.success(body)
                     }
-                }
 
-                override fun onFailure(call: Call<List<TimesRecord>>, t: Throwable) {
-                    Log.d("header ", "GetTimesRecordsApi call failed")
-                    it.resumeWith(Result.failure(Exception()))
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-            })
-        }
-
+            }
+        return callApi({ apiBuilder.getTimesRecords(account) }, action)
     }
 
     suspend fun recommendTimesRecords(user_id: Int): List<TimesRecord> {
-        return suspendCancellableCoroutine {
-            val retrofitData1 = apiBuilder.getRecommendTimesRecords(user_id)
-            retrofitData1.enqueue(object : Callback<List<TimesRecord>> {
-                override fun onResponse(
-                    call: Call<List<TimesRecord>>,
-                    response: Response<List<TimesRecord>>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        //API回傳結果
-
-                        val response = response.body() ?: listOf()
-                        it.resumeWith(Result.success(response))
-
-                        Log.d("header ", "user_id = $user_id got recommended time records")
-
-                    } else {
-                        Log.d(
-                            "header ",
-                            "user_id = $user_id failed to get recommended time records"
-                        )
-                        // 處理 API 錯誤回應
-                        it.resumeWith(Result.failure(Exception()))
+        val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful) {
+                    //API回傳結果
+                    if(body==null){
+                        Result.success(listOf())
+                    }else{
+                        Result.success(body)
                     }
-                }
 
-                override fun onFailure(call: Call<List<TimesRecord>>, t: Throwable) {
-                    Log.d("header ", "GetRecommendedTimeRecord call failed")
-                    it.resumeWith(Result.failure(Exception()))
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-            })
-        }
-
+            }
+        return callApi({ apiBuilder.getRecommendTimesRecords(user_id) }, action)
     }
 
     suspend fun recommendSetsRecords(user_id: Int): List<SetsRecord> {
-        return suspendCancellableCoroutine {
-            val retrofitData1 = apiBuilder.getRecommendSetsRecords(user_id)
-            retrofitData1.enqueue(object : Callback<List<SetsRecord>> {
-                override fun onResponse(
-                    call: Call<List<SetsRecord>>,
-                    response: Response<List<SetsRecord>>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
 
-                    if (response.isSuccessful) {
-                        //API回傳結果
-
-                        val response = response.body() ?: listOf()
-                        it.resumeWith(Result.success(response))
-
-                        Log.d("header ", "user_id = $user_id got recommended sets records")
-
-                    } else {
-                        Log.d(
-                            "header ",
-                            "user_id = $user_id failed to get recommended sets records"
-                        )
-                        // 處理 API 錯誤回應
-                        it.resumeWith(Result.failure(Exception()))
+        val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful) {
+                    //API回傳結果
+                    if(body==null){
+                        Result.success(listOf())
+                    }else{
+                        Result.success(body)
                     }
-                }
 
-                override fun onFailure(call: Call<List<SetsRecord>>, t: Throwable) {
-                    Log.d("header ", "GetRecommendedSetsRecord call failed")
-                    it.resumeWith(Result.failure(Exception()))
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-            })
-        }
+            }
+        return callApi({ apiBuilder.getRecommendSetsRecords(user_id) }, action)
+
     }
 
-    suspend fun follow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
-        val action: (response:Response<OperationMsg>,it: CancellableContinuation<OperationMsg>) -> Result<OperationMsg> = { response,it ->
-            val body = response.body()
-            if (response.isSuccessful) {
-                //API回傳結果
-                if(body==null){
-                    Result.success(OperationMsg(""))
-                }else{
-                    Result.success(body)
+    suspend fun follow(SubjectUserAccount: String?, ObjectUserAccount: String) {
+        val action: (response: Response<OperationMsg>) -> Result<Unit> =
+            { response ->
+                if (response.isSuccessful) {
+                    //API回傳結果
+                    Result.success(Unit)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
                 }
-            } else {
-                Result.failure(ApiException.Read)
-                // 處理 API 錯誤回應
             }
-        }
-        return callApi ({ apiBuilder.follow(SubjectUserAccount, ObjectUserAccount)},action)
+        return callApi({ apiBuilder.follow(SubjectUserAccount, ObjectUserAccount) }, action)
     }
 
     suspend fun unFollow(SubjectUserAccount: String?, ObjectUserAccount: String): OperationMsg {
 
-        val action: (response:Response<OperationMsg>,it: CancellableContinuation<OperationMsg>) -> Result<OperationMsg> = { response,it ->
-            val body = response.body()
-            if (response.isSuccessful&&body!=null) {
-                //API回傳結果
-                Result.success(body)
-            } else {
-                Result.failure(ApiException.Read)
-                // 處理 API 錯誤回應
+        val action: (response: Response<OperationMsg>) -> Result<OperationMsg> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    //API回傳結果
+                    Result.success(body)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
+                }
             }
-        }
-        return callApi ({ apiBuilder.unfollow(SubjectUserAccount, ObjectUserAccount)},action)
+        return callApi({ apiBuilder.unfollow(SubjectUserAccount, ObjectUserAccount) }, action)
     }
 }
