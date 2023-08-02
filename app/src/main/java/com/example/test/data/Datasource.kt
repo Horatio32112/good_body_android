@@ -26,9 +26,9 @@ class Datasource {
                 val body = response.body()
                 if (response.isSuccessful) {
                     //API回傳結果
-                    if(body==null){
+                    if (body == null) {
                         Result.success(listOf())
-                    }else{
+                    } else {
                         Result.success(body)
                     }
 
@@ -45,7 +45,7 @@ class Datasource {
         val action: (response: Response<UserId>) -> Result<Int> =
             { response ->
                 val body = response.body()
-                if (response.isSuccessful&&body!=null){
+                if (response.isSuccessful && body != null) {
                     Result.success(body.user_id)
                 } else {
                     Result.failure(ApiException.Read)
@@ -59,7 +59,7 @@ class Datasource {
     suspend fun getProfile(account: String): ProfileMessenger {
         val action: (response: Response<PersonalProfile>) -> Result<ProfileMessenger> =
             { response ->
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val body = response.body()
                     val messenger = ProfileMessenger(body, null)
                     Result.success(messenger)
@@ -142,9 +142,9 @@ class Datasource {
                 val body = response.body()
                 if (response.isSuccessful) {
                     //API回傳結果
-                    if(body==null){
+                    if (body == null) {
                         Result.success(listOf())
-                    }else{
+                    } else {
                         Result.success(body)
                     }
 
@@ -162,9 +162,9 @@ class Datasource {
                 val body = response.body()
                 if (response.isSuccessful) {
                     //API回傳結果
-                    if(body==null){
+                    if (body == null) {
                         Result.success(listOf())
-                    }else{
+                    } else {
                         Result.success(body)
                     }
 
@@ -183,9 +183,9 @@ class Datasource {
                 val body = response.body()
                 if (response.isSuccessful) {
                     //API回傳結果
-                    if(body==null){
+                    if (body == null) {
                         Result.success(listOf())
-                    }else{
+                    } else {
                         Result.success(body)
                     }
 
