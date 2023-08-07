@@ -13,13 +13,15 @@ import com.example.test.model.User
 import com.example.test.model.UserId
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Datasource {
-    private val client = ApiSetUp.createOkHttpClient()
-    private val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(client)
+object Datasource {
+    private val client: OkHttpClient = ApiSetUp.createOkHttpClient()
+    private val apiBuilder:ApiV1 = ApiSetUp.createRetrofit<ApiV1>(client)
+
     suspend fun loadSetsRecords(account: String): List<SetsRecord> {
         val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
             { response ->

@@ -17,7 +17,7 @@ class RegisterViewModel : ViewModel() {
         viewModelScope.launch {
 
             try {
-                val userId = Datasource().register(user)
+                val userId = Datasource.register(user)
                 idLiveData.postValue(userId)
             } catch (ex: ApiException) {
                 msgLiveData.postValue(ex.message)

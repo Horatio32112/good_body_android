@@ -58,7 +58,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
                 followButton.setOnClickListener {
 
                     lifecycleScope.launch {
-                        Datasource().unFollow(account, objectUserAccount)
+                        Datasource.unFollow(account, objectUserAccount)
                         isFollowing = false
                         setUpFollowBtn()
                         Log.d("header ", "status changed")
@@ -70,7 +70,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
                 followButton.setOnClickListener {
 
                     lifecycleScope.launch {
-                        Datasource().follow(account, objectUserAccount)
+                        Datasource.follow(account, objectUserAccount)
                         isFollowing = true
                         setUpFollowBtn()
                         Log.d("header ", "status changed")
@@ -128,8 +128,8 @@ class OtherUserProfileActivity : AppCompatActivity() {
         })
 
         lifecycleScope.launch {
-            val setsData = Datasource().loadSetsRecords(objectUserAccount)
-            val timeData = Datasource().loadTimesRecords(objectUserAccount)
+            val setsData = Datasource.loadSetsRecords(objectUserAccount)
+            val timeData = Datasource.loadTimesRecords(objectUserAccount)
 
             records.clear()
             records.addAll(setsData+timeData)

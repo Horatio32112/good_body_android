@@ -17,7 +17,7 @@ class MyPersonalProfileViewModel : ViewModel() {
         viewModelScope.launch {
 
             try {
-                val data = Datasource().getProfile(account)
+                val data = Datasource.getProfile(account)
                 profileLiveData.postValue(data.profile)
             }catch (ex: ApiException){
                 msgLiveData.postValue(ex.message)
@@ -30,7 +30,7 @@ class MyPersonalProfileViewModel : ViewModel() {
         viewModelScope.launch {
 
             try {
-                val data = Datasource().updateProfile(account, profile)
+                val data = Datasource.updateProfile(account, profile)
 
                 profileLiveData.postValue(data)
                 msgLiveData.postValue("update success")

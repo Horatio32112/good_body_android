@@ -43,7 +43,7 @@ class MyTimeRecordsActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            val data: List<TimesRecord> = Datasource().loadTimesRecords(account.toString())
+            val data: List<TimesRecord> = Datasource.loadTimesRecords(account.toString())
             recyclerView.adapter = TimeRecordItemAdapter(dataset = data)
             recyclerView.setHasFixedSize(true)
         }
