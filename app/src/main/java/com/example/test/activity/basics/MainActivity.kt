@@ -9,13 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.test.R
-import com.example.test.api.ApiSetUp
-import com.example.test.api.ApiV1
-import com.example.test.model.UserId
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.test.api.ApiException
+import com.example.test.data.Datasource
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,48 +52,31 @@ class MainActivity : AppCompatActivity() {
                 passwordInput.error="This block cannot be blank"
 
             } else {
+                lifecycleScope.launch {
+                    try {
+                        val userId = Datasource.getId(account).user_id
+                        val toast = Toast.makeText(context, "login_info_submitted", Toast.LENGTH_SHORT)
+                        toast.show()
 
-                val okHttpClient = ApiSetUp.createOkHttpClient()
-                val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-                val apiCaller = apiBuilder.getId(account)
-                apiCaller.enqueue(object : Callback<UserId> {
-                    override fun onResponse(
-                        call: Call<UserId>,
-                        response: Response<UserId>
-                    ) {
-                        Log.d("header ", "test ${Thread.currentThread()}")
+                        val sharedPreferences = context.getSharedPreferences("account_info", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("account", account)
 
-                        if (response.isSuccessful) {
-                            //API回傳結果
-                            val userId : Int? = response.body()?.user_id
+                        userId.let { id -> editor.putInt("user_id", id) }
+                        editor.apply()
 
-                            val toast = Toast.makeText(context, "info_submitted", Toast.LENGTH_SHORT)
-                            toast.show()
+                        val intent = Intent(context, HomeActivity::class.java)
+                        context.startActivity(intent)
 
-                            val sharedPreferences = context.getSharedPreferences("account_info", Context.MODE_PRIVATE)
-                            val editor = sharedPreferences.edit()
-                            editor.putString("account", account)
+                        Log.d("header ", "user exists, id = $userId")
+                        Log.d("header ", "$account logged in.")
 
-                            userId?.let { id -> editor.putInt("user_id", id) }
-                            editor.apply()
-
-                            val intent = Intent(context, HomeActivity::class.java)
-                            context.startActivity(intent)
-
-                            Log.d("header ", "user exists, id = $userId")
-                            Log.d("header ", "$account logged in.")
-
-                        } else {
-                            Log.d("header ", "user not exist or something went wrong")
-                            // 處理 API 錯誤回應
-                        }
-                    }
-                    override fun onFailure(call: Call<UserId>, t: Throwable) {
-                        Log.d("header ", "GetUserIdByAccountApi call failed")
+                    } catch (ex: ApiException) {
+                        val toast = Toast.makeText(context, "login_failed", Toast.LENGTH_SHORT)
+                        toast.show()
                     }
 
-                })
-
+                }
             }
         }
     }
