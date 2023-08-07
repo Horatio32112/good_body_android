@@ -6,15 +6,14 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
-import com.example.test.api.ApiException
-import com.example.test.data.Datasource
-import kotlinx.coroutines.launch
+import com.example.test.viewmodel.AddTimeRecordsViewModel
 
 class AddTimeRecordsActivity : AppCompatActivity() {
+    private val viewModel by viewModels<AddTimeRecordsViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_time_records)
@@ -37,18 +36,18 @@ class AddTimeRecordsActivity : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
             val userId = sharedPreferences.getInt("user_id", -1)
 
-            lifecycleScope.launch{
-                try{
-                    Datasource.createTimeRecords(userId, content, duration, distance)
+            viewModel.createTimeRecords(userId, content, duration, distance)
+
+            viewModel.msgLiveData.observe(this) { msg ->
+                msg ?: return@observe
+                val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+                toast.show()
+
+                if (msg == "success") {
                     val intent = Intent(context, HomeActivity::class.java)
                     context.startActivity(intent)
-                } catch (ex: ApiException) {
-                    val toast = Toast.makeText(context, "create timeRecord failed", Toast.LENGTH_SHORT)
-                    toast.show()
                 }
             }
         }
     }
-
-
 }

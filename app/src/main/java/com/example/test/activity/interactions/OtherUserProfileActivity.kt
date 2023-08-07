@@ -11,12 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.records.MySetsRecordsActivity
 import com.example.test.activity.records.MyTimeRecordsActivity
+import com.example.test.adapter.RecommendRecordItemAdapter
 import com.example.test.api.ApiSetUp
 import com.example.test.api.ApiV1
 import com.example.test.data.Datasource
@@ -65,7 +65,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
                     }
 
                 }
-            } else if (!isFollowing) {
+            } else {
                 followButton.text = "Follow"
                 followButton.setOnClickListener {
 
@@ -101,10 +101,12 @@ class OtherUserProfileActivity : AppCompatActivity() {
                             isFollowing = true
                             setUpFollowBtn()
                         }
+
                         "not_following" -> {
                             isFollowing = false
                             setUpFollowBtn()
                         }
+
                         else -> {
                             Log.d("header ", "follow status check went wrong")
                         }
@@ -132,7 +134,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
             val timeData = Datasource.loadTimesRecords(objectUserAccount)
 
             records.clear()
-            records.addAll(setsData+timeData)
+            records.addAll(setsData + timeData)
 
             Log.d("header ", "$records")
             recyclerView.adapter = RecommendRecordItemAdapter(records)
