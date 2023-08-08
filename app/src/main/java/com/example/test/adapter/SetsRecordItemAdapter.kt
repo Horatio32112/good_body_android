@@ -1,6 +1,6 @@
 package com.example.test.adapter
 
-import android.util.Log
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +8,11 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
-import com.example.test.api.ApiSetUp
-import com.example.test.api.ApiV1
-import com.example.test.model.OperationMsg
+import com.example.test.activity.records.MySetsRecordsActivity
 import com.example.test.model.SetsRecord
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class SetsRecordItemAdapter(private val dataset: List<SetsRecord>) :
+class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val context: Context) :
+
     RecyclerView.Adapter<SetsRecordItemAdapter.ItemViewHolder>() {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contentInputField: EditText = view.findViewById(R.id.set_record_ContentInput)
@@ -50,34 +46,13 @@ class SetsRecordItemAdapter(private val dataset: List<SetsRecord>) :
             val reps = holder.repsInputField.text.toString().toInt()
             val weight = holder.weightInputField.text.toString().toFloat()
 
-            val okHttpClient = ApiSetUp.createOkHttpClient()
-            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val apiCaller =
-                apiBuilder.updateSetsRecords(recordId, content, sets, reps, weight)
-            apiCaller.enqueue(object : Callback<OperationMsg> {
-                override fun onResponse(
-                    call: Call<OperationMsg>,
-                    response: Response<OperationMsg>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
-
-                    if (response.isSuccessful) {
-                        //API回傳結果
-
-
-                        Log.d("header ", "record id $recordId is updated")
-
-                    } else {
-                        Log.d("header ", "record id $recordId failed to update")
-                        // 處理 API 錯誤回應
-                    }
-                }
-
-                override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
-                    Log.d("header ", "update_sets_records_api call failed")
-                }
-
-            })
+            (context as MySetsRecordsActivity).updateSetsRecords(
+                recordId,
+                content,
+                sets,
+                reps,
+                weight
+            )
         }
 
     }

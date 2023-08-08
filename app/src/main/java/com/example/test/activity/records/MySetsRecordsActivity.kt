@@ -6,19 +6,19 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.interactions.FindUserActivity
 import com.example.test.adapter.SetsRecordItemAdapter
-import com.example.test.data.Datasource
-import kotlinx.coroutines.launch
+import com.example.test.viewmodel.MySetsRecordsViewModel
 
 class MySetsRecordsActivity : AppCompatActivity() {
-
+    private val viewModel by viewModels<MySetsRecordsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +40,19 @@ class MySetsRecordsActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        lifecycleScope.launch {
-            val data = Datasource.loadSetsRecords(account.toString())
+        viewModel.loadSetsRecords(account.toString())
 
-            recyclerView.adapter = SetsRecordItemAdapter(data)
+        viewModel.setsRecordLiveData.observe(this){records ->
+            records ?: return@observe
+
+            recyclerView.adapter = SetsRecordItemAdapter(records,context)
             recyclerView.setHasFixedSize(true)
+        }
+
+        viewModel.msgLiveData.observe(this){msg ->
+            msg ?: return@observe
+            val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+            toast.show()
         }
 
     }
@@ -84,5 +92,9 @@ class MySetsRecordsActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun updateSetsRecords(recordId:Int, content:String, sets:Int, reps:Int, weight:Float){
+        viewModel.updateSetsRecords(recordId,content,sets,reps,weight)
     }
 }
