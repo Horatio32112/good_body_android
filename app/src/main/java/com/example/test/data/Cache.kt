@@ -4,7 +4,7 @@ class Cache<T>{
     private var content:T?=null
     private var hasExpired = true
 
-    fun getCache():T?{
+    fun getContent():T?{
         return if(hasExpired){
             null
         }else{

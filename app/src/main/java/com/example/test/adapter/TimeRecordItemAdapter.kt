@@ -1,6 +1,5 @@
 package com.example.test.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import com.example.test.R
 import com.example.test.activity.records.MyTimeRecordsActivity
 import com.example.test.model.TimesRecord
 
-class TimeRecordItemAdapter(private val dataset: List<TimesRecord>, private val context: Context) :
+class TimeRecordItemAdapter(private val dataset: List<TimesRecord>, private val bridge: MyTimeRecordsActivity.TimeRecordsBridge) :
     RecyclerView.Adapter<TimeRecordItemAdapter.ItemViewHolder>() {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contentInputField: TextView = view.findViewById(R.id.time_record_ContentInput)
@@ -42,7 +41,7 @@ class TimeRecordItemAdapter(private val dataset: List<TimesRecord>, private val 
             val duration = holder.durationInputField.text.toString().toInt()
             val distance = holder.distanceInputField.text.toString().toFloat()
 
-            (context as MyTimeRecordsActivity).updateTimeRecords(
+            bridge.updateTimeRecords(
                 recordId,
                 content,
                 duration,

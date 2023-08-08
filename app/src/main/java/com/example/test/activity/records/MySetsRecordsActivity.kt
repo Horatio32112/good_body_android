@@ -20,11 +20,27 @@ import com.example.test.viewmodel.MySetsRecordsViewModel
 class MySetsRecordsActivity : AppCompatActivity() {
     private val viewModel by viewModels<MySetsRecordsViewModel>()
 
+    class SetsRecordsBridge(private val viewModel: MySetsRecordsViewModel) {
+        fun updateSetsRecords(
+            recordId: Int, content: String, sets: Int,
+            reps: Int,
+            weight: Float
+        ) {
+            viewModel.updateSetsRecords(
+                recordId,
+                content,
+                sets,
+                reps,
+                weight
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_sets_records)
-        val addBtn: Button =findViewById(R.id.my_sets_records_AddRecordBtn)
-        val homeBtn: Button =findViewById(R.id.my_sets_records_HomeBtn)
+        val addBtn: Button = findViewById(R.id.my_sets_records_AddRecordBtn)
+        val homeBtn: Button = findViewById(R.id.my_sets_records_HomeBtn)
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
@@ -42,14 +58,14 @@ class MySetsRecordsActivity : AppCompatActivity() {
 
         viewModel.loadSetsRecords(account.toString())
 
-        viewModel.setsRecordLiveData.observe(this){records ->
+        viewModel.setsRecordLiveData.observe(this) { records ->
             records ?: return@observe
 
-            recyclerView.adapter = SetsRecordItemAdapter(records,context)
+            recyclerView.adapter = SetsRecordItemAdapter(records, SetsRecordsBridge(viewModel))
             recyclerView.setHasFixedSize(true)
         }
 
-        viewModel.msgLiveData.observe(this){msg ->
+        viewModel.msgLiveData.observe(this) { msg ->
             msg ?: return@observe
             val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
             toast.show()
@@ -71,6 +87,7 @@ class MySetsRecordsActivity : AppCompatActivity() {
 
                 true
             }
+
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
@@ -94,7 +111,4 @@ class MySetsRecordsActivity : AppCompatActivity() {
         }
     }
 
-    fun updateSetsRecords(recordId:Int, content:String, sets:Int, reps:Int, weight:Float){
-        viewModel.updateSetsRecords(recordId,content,sets,reps,weight)
-    }
 }

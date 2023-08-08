@@ -20,7 +20,13 @@ import com.example.test.viewmodel.MyTimeRecordsViewModel
 class MyTimeRecordsActivity : AppCompatActivity() {
     private val viewModel by viewModels<MyTimeRecordsViewModel>()
 
+    class TimeRecordsBridge(private val viewModel: MyTimeRecordsViewModel){
+        fun updateTimeRecords(recordId: Int, content: String, duration: Int, distance: Float) {
+            viewModel.updateTimeRecords(recordId, content, duration, distance)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_time_records)
 
@@ -46,7 +52,7 @@ class MyTimeRecordsActivity : AppCompatActivity() {
         viewModel.timeRecordLiveData.observe(this) { records ->
             records ?: return@observe
 
-            recyclerView.adapter = TimeRecordItemAdapter(records, context)
+            recyclerView.adapter = TimeRecordItemAdapter(records, TimeRecordsBridge(viewModel))
             recyclerView.setHasFixedSize(true)
         }
 
@@ -94,9 +100,8 @@ class MyTimeRecordsActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+
     }
 
-    fun updateTimeRecords(recordId: Int, content: String, duration: Int, distance: Float) {
-        viewModel.updateTimeRecords(recordId, content, duration, distance)
-    }
+
 }

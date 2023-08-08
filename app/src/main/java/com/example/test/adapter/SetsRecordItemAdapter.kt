@@ -11,7 +11,7 @@ import com.example.test.R
 import com.example.test.activity.records.MySetsRecordsActivity
 import com.example.test.model.SetsRecord
 
-class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val context: Context) :
+class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val bridge: MySetsRecordsActivity.SetsRecordsBridge) :
 
     RecyclerView.Adapter<SetsRecordItemAdapter.ItemViewHolder>() {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -46,13 +46,14 @@ class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val c
             val reps = holder.repsInputField.text.toString().toInt()
             val weight = holder.weightInputField.text.toString().toFloat()
 
-            (context as MySetsRecordsActivity).updateSetsRecords(
+            bridge.updateSetsRecords(
                 recordId,
                 content,
                 sets,
                 reps,
                 weight
             )
+
         }
 
     }

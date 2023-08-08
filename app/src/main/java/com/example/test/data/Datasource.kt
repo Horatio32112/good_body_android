@@ -24,13 +24,15 @@ object Datasource {
     private val setsRecordsCache = Cache<List<SetsRecord>>()
     private val timeRecordsCache = Cache<List<TimesRecord>>()
     suspend fun loadSetsRecords(account: String): List<SetsRecord> {
-        if (setsRecordsCache.hasExpired()) {
+        val records = setsRecordsCache.getContent()
+        if (records == null) {
             val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
                 { response ->
                     val body = response.body()
                     if (response.isSuccessful) {
                         //API回傳結果
                         if (body == null) {
+                            setsRecordsCache.setCache(listOf())
                             Result.success(listOf())
                         } else {
                             setsRecordsCache.setCache(body)
@@ -43,8 +45,7 @@ object Datasource {
                 }
             return callApi({ apiBuilder.getSetsRecords(account) }, action)
         } else {
-            return setsRecordsCache.getCache() ?: listOf()
-
+            return records
         }
     }
 
@@ -146,13 +147,15 @@ object Datasource {
 
 
     suspend fun loadTimesRecords(account: String): List<TimesRecord> {
-        if (timeRecordsCache.hasExpired()) {
+        val records = timeRecordsCache.getContent()
+        if (records == null) {
             val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
                 { response ->
                     val body = response.body()
                     if (response.isSuccessful) {
                         //API回傳結果
                         if (body == null) {
+                            timeRecordsCache.setCache(listOf())
                             Result.success(listOf())
                         } else {
                             timeRecordsCache.setCache(body)
@@ -166,7 +169,7 @@ object Datasource {
                 }
             return callApi({ apiBuilder.getTimesRecords(account) }, action)
         } else {
-            return timeRecordsCache.getCache() ?: listOf()
+            return records
 
         }
     }
