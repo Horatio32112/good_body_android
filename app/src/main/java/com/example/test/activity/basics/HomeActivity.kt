@@ -100,8 +100,8 @@ class HomeActivity : AppCompatActivity() {
         })
 
         lifecycleScope.launch {
-            val setsData = Datasource().recommendSetsRecords(userId)
-            val timeData = Datasource().recommendTimesRecords(userId)
+            val setsData = Datasource.recommendSetsRecords(userId)
+            val timeData = Datasource.recommendTimesRecords(userId)
 
 
             recommendedRecords.clear()

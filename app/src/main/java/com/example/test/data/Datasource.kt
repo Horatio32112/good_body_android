@@ -13,13 +13,15 @@ import com.example.test.model.User
 import com.example.test.model.UserId
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Datasource {
-    private val client = ApiSetUp.createOkHttpClient()
-    private val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(client)
+object Datasource {
+    private val client: OkHttpClient = ApiSetUp.createOkHttpClient()
+    private val apiBuilder: ApiV1 = ApiSetUp.createRetrofit<ApiV1>(client)
+
     suspend fun loadSetsRecords(account: String): List<SetsRecord> {
         val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
             { response ->
@@ -227,4 +229,88 @@ class Datasource {
             }
         return callApi({ apiBuilder.unfollow(SubjectUserAccount, ObjectUserAccount) }, action)
     }
+
+    suspend fun getId(account: String): UserId {
+
+        val action: (response: Response<UserId>) -> Result<UserId> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    //API回傳結果
+                    Result.success(body)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
+                }
+            }
+        return callApi({ apiBuilder.getId(account) }, action)
+    }
+
+    suspend fun updateSetsRecords(
+        recordId: Int,
+        content: String,
+        sets: Int,
+        reps: Int,
+        weight: Float
+    ){
+
+        val action: (response: Response<OperationMsg>) -> Result<Unit> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    //API回傳結果
+                    Result.success(Unit)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
+                }
+            }
+        return callApi(
+            { apiBuilder.updateSetsRecords(recordId, content, sets, reps, weight) },
+            action
+        )
+    }
+
+    suspend fun createTimeRecords(
+        userId:Int, content:String, duration:Int, distance:Float
+    ){
+
+        val action: (response: Response<OperationMsg>) -> Result<Unit> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    //API回傳結果
+                    Result.success(Unit)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
+                }
+            }
+        return callApi(
+            { apiBuilder.createTimeRecords(userId, content, duration, distance) },
+            action
+        )
+    }
+
+    suspend fun createSetsRecords(
+        userId:Int,content:String,sets:Int,reps:Int,weight:Float
+    ){
+
+        val action: (response: Response<OperationMsg>) -> Result<Unit> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    //API回傳結果
+                    Result.success(Unit)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
+                }
+            }
+        return callApi(
+            { apiBuilder.createSetsRecords(userId,content,sets,reps,weight) },
+            action
+        )
+    }
+
 }
