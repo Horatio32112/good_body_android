@@ -8,7 +8,7 @@ import com.example.test.data.Datasource
 import com.example.test.model.TimesRecord
 import kotlinx.coroutines.launch
 
-class MyTimeRecordsViewModel : ViewModel() {
+class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
 
     val timeRecordLiveData = MutableLiveData<List<TimesRecord>>(null)
     val msgLiveData = MutableLiveData<String>(null)
@@ -24,10 +24,11 @@ class MyTimeRecordsViewModel : ViewModel() {
         }
     }
 
-    fun updateTimeRecords(recordId: Int, content: String, duration: Int, distance: Float) {
+    override fun updateRecord(record: TimesRecord) {
+        super.updateRecord(record)
         viewModelScope.launch {
             try {
-                Datasource.updateTimeRecords(recordId, content, duration, distance)
+                Datasource.updateTimeRecords(record)
                 msgLiveData.postValue("update success")
 
             } catch (ex: ApiException) {

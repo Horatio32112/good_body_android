@@ -1,6 +1,5 @@
 package com.example.test.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +7,10 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
-import com.example.test.activity.records.MySetsRecordsActivity
 import com.example.test.model.SetsRecord
+import com.example.test.viewmodel.RecordViewModel
 
-class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val bridge: MySetsRecordsActivity.SetsRecordsBridge) :
+class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val recordBridge: RecordBridge) :
 
     RecyclerView.Adapter<SetsRecordItemAdapter.ItemViewHolder>() {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -46,13 +45,12 @@ class SetsRecordItemAdapter(private val dataset: List<SetsRecord>, private val b
             val reps = holder.repsInputField.text.toString().toInt()
             val weight = holder.weightInputField.text.toString().toFloat()
 
-            bridge.updateSetsRecords(
-                recordId,
-                content,
-                sets,
-                reps,
-                weight
-            )
+
+            val action: (record: SetsRecord,viewModel: RecordViewModel) -> Unit =
+                { record,viewModel ->
+                   viewModel.updateRecord(record)
+                }
+            recordBridge.doAction(SetsRecord(record_id = recordId, contents=content,sets=sets, reps = reps, weight = weight),action)
 
         }
 

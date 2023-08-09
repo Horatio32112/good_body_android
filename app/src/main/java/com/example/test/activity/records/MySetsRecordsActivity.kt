@@ -14,27 +14,13 @@ import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.interactions.FindUserActivity
+import com.example.test.adapter.RecordBridge
 import com.example.test.adapter.SetsRecordItemAdapter
 import com.example.test.viewmodel.MySetsRecordsViewModel
 
 class MySetsRecordsActivity : AppCompatActivity() {
     private val viewModel by viewModels<MySetsRecordsViewModel>()
 
-    class SetsRecordsBridge(private val viewModel: MySetsRecordsViewModel) {
-        fun updateSetsRecords(
-            recordId: Int, content: String, sets: Int,
-            reps: Int,
-            weight: Float
-        ) {
-            viewModel.updateSetsRecords(
-                recordId,
-                content,
-                sets,
-                reps,
-                weight
-            )
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +47,7 @@ class MySetsRecordsActivity : AppCompatActivity() {
         viewModel.setsRecordLiveData.observe(this) { records ->
             records ?: return@observe
 
-            recyclerView.adapter = SetsRecordItemAdapter(records, SetsRecordsBridge(viewModel))
+            recyclerView.adapter = SetsRecordItemAdapter(records, RecordBridge(viewModel))
             recyclerView.setHasFixedSize(true)
         }
 

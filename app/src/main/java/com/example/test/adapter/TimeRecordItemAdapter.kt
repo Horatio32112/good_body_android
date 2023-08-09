@@ -7,9 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
 import com.example.test.activity.records.MyTimeRecordsActivity
+import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
+import com.example.test.viewmodel.RecordViewModel
 
-class TimeRecordItemAdapter(private val dataset: List<TimesRecord>, private val bridge: MyTimeRecordsActivity.TimeRecordsBridge) :
+class TimeRecordItemAdapter(private val dataset: List<TimesRecord>, private val recordBridge: RecordBridge) :
     RecyclerView.Adapter<TimeRecordItemAdapter.ItemViewHolder>() {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contentInputField: TextView = view.findViewById(R.id.time_record_ContentInput)
@@ -41,12 +43,11 @@ class TimeRecordItemAdapter(private val dataset: List<TimesRecord>, private val 
             val duration = holder.durationInputField.text.toString().toInt()
             val distance = holder.distanceInputField.text.toString().toFloat()
 
-            bridge.updateTimeRecords(
-                recordId,
-                content,
-                duration,
-                distance
-            )
+            val action: (record: TimesRecord, viewModel: RecordViewModel) -> Unit =
+                { record,viewModel ->
+                    viewModel.updateRecord(record)
+                }
+            recordBridge.doAction(TimesRecord(record_id = recordId, contents=content, duration = duration, distance = distance),action)
         }
 
     }

@@ -263,11 +263,7 @@ object Datasource {
     }
 
     suspend fun updateSetsRecords(
-        recordId: Int,
-        content: String,
-        sets: Int,
-        reps: Int,
-        weight: Float
+        record: SetsRecord
     ) {
 
         val action: (response: Response<OperationMsg>) -> Result<Unit> =
@@ -283,16 +279,21 @@ object Datasource {
                 }
             }
         return callApi(
-            { apiBuilder.updateSetsRecords(recordId, content, sets, reps, weight) },
+            {
+                apiBuilder.updateSetsRecords(
+                    record.record_id,
+                    record.contents,
+                    record.sets,
+                    record.reps,
+                    record.weight
+                )
+            },
             action
         )
     }
 
     suspend fun updateTimeRecords(
-        recordId: Int,
-        content: String,
-        duration: Int,
-        distance: Float
+        record: TimesRecord
     ) {
 
         val action: (response: Response<OperationMsg>) -> Result<Unit> =
@@ -308,7 +309,14 @@ object Datasource {
                 }
             }
         return callApi(
-            { apiBuilder.updateTimeRecords(recordId, content, duration, distance) },
+            {
+                apiBuilder.updateTimeRecords(
+                    record.record_id,
+                    record.contents,
+                    record.duration,
+                    record.distance
+                )
+            },
             action
         )
     }
