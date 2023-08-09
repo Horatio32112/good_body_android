@@ -6,25 +6,28 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.interactions.FindUserActivity
+import com.example.test.adapter.Bridge
 import com.example.test.adapter.SetsRecordItemAdapter
-import com.example.test.data.Datasource
-import kotlinx.coroutines.launch
+import com.example.test.model.SetsRecord
+import com.example.test.viewmodel.MySetsRecordsViewModel
 
 class MySetsRecordsActivity : AppCompatActivity() {
+    private val viewModel by viewModels<MySetsRecordsViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_sets_records)
-        val addBtn: Button =findViewById(R.id.my_sets_records_AddRecordBtn)
-        val homeBtn: Button =findViewById(R.id.my_sets_records_HomeBtn)
+        val addBtn: Button = findViewById(R.id.my_sets_records_AddRecordBtn)
+        val homeBtn: Button = findViewById(R.id.my_sets_records_HomeBtn)
 
         val sharedPreferences = getSharedPreferences("account_info", Context.MODE_PRIVATE)
         val account = sharedPreferences.getString("account", "")
@@ -40,11 +43,23 @@ class MySetsRecordsActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        lifecycleScope.launch {
-            val data = Datasource.loadSetsRecords(account.toString())
+        viewModel.loadSetsRecords(account.toString())
 
-            recyclerView.adapter = SetsRecordItemAdapter(data)
+        viewModel.setsRecordLiveData.observe(this) { records ->
+            records ?: return@observe
+
+            recyclerView.adapter = SetsRecordItemAdapter(records, object : Bridge<SetsRecord> {
+                override val action: (t: SetsRecord) -> Unit = {
+                    viewModel.updateRecord(it)
+                }
+            })
             recyclerView.setHasFixedSize(true)
+        }
+
+        viewModel.msgLiveData.observe(this) { msg ->
+            msg ?: return@observe
+            val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+            toast.show()
         }
 
     }
@@ -63,6 +78,7 @@ class MySetsRecordsActivity : AppCompatActivity() {
 
                 true
             }
+
             R.id.menu_MyProfile -> {
                 val intent = Intent(context, MyPersonalProfileActivity::class.java)
                 context.startActivity(intent)
@@ -85,4 +101,5 @@ class MySetsRecordsActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

@@ -6,22 +6,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.adapter.TimeRecordItemAdapter
 import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.interactions.FindUserActivity
-import com.example.test.data.Datasource
+import com.example.test.adapter.Bridge
+import com.example.test.adapter.TimeRecordItemAdapter
 import com.example.test.model.TimesRecord
-import kotlinx.coroutines.launch
+import com.example.test.viewmodel.MyTimeRecordsViewModel
 
 class MyTimeRecordsActivity : AppCompatActivity() {
-
-
+    private val viewModel by viewModels<MyTimeRecordsViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_time_records)
 
@@ -42,10 +43,25 @@ class MyTimeRecordsActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        lifecycleScope.launch {
-            val data: List<TimesRecord> = Datasource.loadTimesRecords(account.toString())
-            recyclerView.adapter = TimeRecordItemAdapter(dataset = data)
+        viewModel.loadTimesRecords(account.toString())
+
+        viewModel.timeRecordLiveData.observe(this) { records ->
+            records ?: return@observe
+
+            recyclerView.adapter = TimeRecordItemAdapter(records, object : Bridge<TimesRecord> {
+                override val action: (t: TimesRecord) -> Unit =
+                    {
+                        viewModel.updateRecord(it)
+                    }
+
+            })
             recyclerView.setHasFixedSize(true)
+        }
+
+        viewModel.msgLiveData.observe(this) { msg ->
+            msg ?: return@observe
+            val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+            toast.show()
         }
 
     }
@@ -86,5 +102,8 @@ class MyTimeRecordsActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+
     }
+
+
 }

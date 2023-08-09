@@ -1,21 +1,17 @@
 package com.example.test.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
-import com.example.test.api.ApiSetUp
-import com.example.test.api.ApiV1
-import com.example.test.model.OperationMsg
 import com.example.test.model.TimesRecord
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class TimeRecordItemAdapter(private val dataset: List<TimesRecord>) :
+class TimeRecordItemAdapter(
+    private val dataset: List<TimesRecord>,
+    private val bridge: Bridge<TimesRecord>
+) :
     RecyclerView.Adapter<TimeRecordItemAdapter.ItemViewHolder>() {
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contentInputField: TextView = view.findViewById(R.id.time_record_ContentInput)
@@ -47,32 +43,15 @@ class TimeRecordItemAdapter(private val dataset: List<TimesRecord>) :
             val duration = holder.durationInputField.text.toString().toInt()
             val distance = holder.distanceInputField.text.toString().toFloat()
 
-            val okHttpClient = ApiSetUp.createOkHttpClient()
-            val apiBuilder = ApiSetUp.createRetrofit<ApiV1>(okHttpClient)
-            val apiCaller =
-                apiBuilder.updateTimeRecords(recordId, content, duration, distance)
-            apiCaller.enqueue(object : Callback<OperationMsg> {
-                override fun onResponse(
-                    call: Call<OperationMsg>,
-                    response: Response<OperationMsg>
-                ) {
-                    Log.d("header ", "test ${Thread.currentThread()}")
 
-                    if (response.isSuccessful) {
-                        //API回傳結果
-                        Log.d("header ", "record id $recordId is updated")
-
-                    } else {
-                        Log.d("header ", "record id $recordId failed to update")
-                        // 處理 API 錯誤回應
-                    }
-                }
-
-                override fun onFailure(call: Call<OperationMsg>, t: Throwable) {
-                    Log.d("header ", "update_time_records_api call failed")
-                }
-
-            })
+            bridge.action(
+                TimesRecord(
+                    record_id = recordId,
+                    contents = content,
+                    duration = duration,
+                    distance = distance
+                )
+            )
         }
 
     }

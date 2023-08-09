@@ -20,27 +20,35 @@ import retrofit2.Response
 
 object Datasource {
     private val client: OkHttpClient = ApiSetUp.createOkHttpClient()
-    private val apiBuilder: ApiV1 = ApiSetUp.createRetrofit<ApiV1>(client)
-
+    private val apiBuilder: ApiV1 = ApiSetUp.createRetrofit(client)
+    private val setsRecordsCache = Cache<List<SetsRecord>>()
+    private val timeRecordsCache = Cache<List<TimesRecord>>()
     suspend fun loadSetsRecords(account: String): List<SetsRecord> {
-        val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
-            { response ->
-                val body = response.body()
-                if (response.isSuccessful) {
-                    //API回傳結果
-                    if (body == null) {
-                        Result.success(listOf())
+        val records = setsRecordsCache.getContent()
+        if (records == null) {
+            val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
+                { response ->
+                    val body = response.body()
+                    if (response.isSuccessful) {
+                        //API回傳結果
+                        if (body == null) {
+                            setsRecordsCache.setCache(listOf())
+                            Result.success(listOf())
+                        } else {
+                            setsRecordsCache.setCache(body)
+                            Result.success(body)
+                        }
                     } else {
-                        Result.success(body)
+                        Result.failure(ApiException.Read)
+                        // 處理 API 錯誤回應
                     }
-
-                } else {
-                    Result.failure(ApiException.Read)
-                    // 處理 API 錯誤回應
                 }
-            }
-        return callApi({ apiBuilder.getSetsRecords(account) }, action)
+            return callApi({ apiBuilder.getSetsRecords(account) }, action)
+        } else {
+            return records
+        }
     }
+
 
     @Throws(ApiException::class)
     suspend fun register(user: User): Int {
@@ -139,23 +147,31 @@ object Datasource {
 
 
     suspend fun loadTimesRecords(account: String): List<TimesRecord> {
-        val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
-            { response ->
-                val body = response.body()
-                if (response.isSuccessful) {
-                    //API回傳結果
-                    if (body == null) {
-                        Result.success(listOf())
-                    } else {
-                        Result.success(body)
-                    }
+        val records = timeRecordsCache.getContent()
+        if (records == null) {
+            val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
+                { response ->
+                    val body = response.body()
+                    if (response.isSuccessful) {
+                        //API回傳結果
+                        if (body == null) {
+                            timeRecordsCache.setCache(listOf())
+                            Result.success(listOf())
+                        } else {
+                            timeRecordsCache.setCache(body)
+                            Result.success(body)
+                        }
 
-                } else {
-                    Result.failure(ApiException.Read)
-                    // 處理 API 錯誤回應
+                    } else {
+                        Result.failure(ApiException.Read)
+                        // 處理 API 錯誤回應
+                    }
                 }
-            }
-        return callApi({ apiBuilder.getTimesRecords(account) }, action)
+            return callApi({ apiBuilder.getTimesRecords(account) }, action)
+        } else {
+            return records
+
+        }
     }
 
     suspend fun recommendTimesRecords(user_id: Int): List<TimesRecord> {
@@ -247,18 +263,15 @@ object Datasource {
     }
 
     suspend fun updateSetsRecords(
-        recordId: Int,
-        content: String,
-        sets: Int,
-        reps: Int,
-        weight: Float
-    ){
+        record: SetsRecord
+    ) {
 
         val action: (response: Response<OperationMsg>) -> Result<Unit> =
             { response ->
                 val body = response.body()
                 if (response.isSuccessful && body != null) {
                     //API回傳結果
+                    setsRecordsCache.expire()
                     Result.success(Unit)
                 } else {
                     Result.failure(ApiException.Read)
@@ -266,20 +279,58 @@ object Datasource {
                 }
             }
         return callApi(
-            { apiBuilder.updateSetsRecords(recordId, content, sets, reps, weight) },
+            {
+                apiBuilder.updateSetsRecords(
+                    record.record_id,
+                    record.contents,
+                    record.sets,
+                    record.reps,
+                    record.weight
+                )
+            },
             action
         )
     }
 
-    suspend fun createTimeRecords(
-        userId:Int, content:String, duration:Int, distance:Float
-    ){
+    suspend fun updateTimeRecords(
+        record: TimesRecord
+    ) {
 
         val action: (response: Response<OperationMsg>) -> Result<Unit> =
             { response ->
                 val body = response.body()
                 if (response.isSuccessful && body != null) {
                     //API回傳結果
+                    timeRecordsCache.expire()
+                    Result.success(Unit)
+                } else {
+                    Result.failure(ApiException.Read)
+                    // 處理 API 錯誤回應
+                }
+            }
+        return callApi(
+            {
+                apiBuilder.updateTimeRecords(
+                    record.record_id,
+                    record.contents,
+                    record.duration,
+                    record.distance
+                )
+            },
+            action
+        )
+    }
+
+    suspend fun createTimeRecords(
+        userId: Int, content: String, duration: Int, distance: Float
+    ) {
+
+        val action: (response: Response<OperationMsg>) -> Result<Unit> =
+            { response ->
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    //API回傳結果
+                    timeRecordsCache.expire()
                     Result.success(Unit)
                 } else {
                     Result.failure(ApiException.Read)
@@ -293,14 +344,15 @@ object Datasource {
     }
 
     suspend fun createSetsRecords(
-        userId:Int,content:String,sets:Int,reps:Int,weight:Float
-    ){
+        userId: Int, content: String, sets: Int, reps: Int, weight: Float
+    ) {
 
         val action: (response: Response<OperationMsg>) -> Result<Unit> =
             { response ->
                 val body = response.body()
                 if (response.isSuccessful && body != null) {
                     //API回傳結果
+                    setsRecordsCache.expire()
                     Result.success(Unit)
                 } else {
                     Result.failure(ApiException.Read)
@@ -308,7 +360,7 @@ object Datasource {
                 }
             }
         return callApi(
-            { apiBuilder.createSetsRecords(userId,content,sets,reps,weight) },
+            { apiBuilder.createSetsRecords(userId, content, sets, reps, weight) },
             action
         )
     }
