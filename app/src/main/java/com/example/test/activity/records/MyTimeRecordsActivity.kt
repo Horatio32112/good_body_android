@@ -14,8 +14,9 @@ import com.example.test.R
 import com.example.test.activity.basics.HomeActivity
 import com.example.test.activity.basics.MyPersonalProfileActivity
 import com.example.test.activity.interactions.FindUserActivity
-import com.example.test.adapter.RecordBridge
+import com.example.test.adapter.Bridge
 import com.example.test.adapter.TimeRecordItemAdapter
+import com.example.test.model.TimesRecord
 import com.example.test.viewmodel.MyTimeRecordsViewModel
 
 class MyTimeRecordsActivity : AppCompatActivity() {
@@ -47,7 +48,13 @@ class MyTimeRecordsActivity : AppCompatActivity() {
         viewModel.timeRecordLiveData.observe(this) { records ->
             records ?: return@observe
 
-            recyclerView.adapter = TimeRecordItemAdapter(records, RecordBridge(viewModel))
+            recyclerView.adapter = TimeRecordItemAdapter(records, object : Bridge<TimesRecord> {
+                override val action: (t: TimesRecord) -> Unit =
+                    {
+                        viewModel.updateRecord(it)
+                    }
+
+            })
             recyclerView.setHasFixedSize(true)
         }
 
