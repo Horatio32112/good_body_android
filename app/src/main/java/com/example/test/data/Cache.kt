@@ -1,9 +1,8 @@
 package com.example.test.data
 
-class Cache<T>{
+open class Cache<T>{
     private var content:T?=null
     private var hasExpired = true
-
     fun getContent():T?{
         return if(hasExpired){
             null
@@ -12,7 +11,7 @@ class Cache<T>{
         }
     }
 
-    fun setCache(objects: T){
+    open fun setCache(objects: T){
         content=objects
         hasExpired = false
     }

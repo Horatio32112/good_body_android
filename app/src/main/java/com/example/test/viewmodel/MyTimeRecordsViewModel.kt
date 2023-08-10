@@ -15,7 +15,7 @@ class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
     fun loadTimesRecords(account: String) {
         viewModelScope.launch {
             try {
-                val records = Datasource.loadTimesRecords(account)
+                val records = Datasource.loadTimesRecords(account,true)
                 timeRecordLiveData.postValue(records)
 
             } catch (ex: ApiException) {
