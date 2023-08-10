@@ -15,7 +15,7 @@ class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
     fun loadSetsRecords(account:String) {
         viewModelScope.launch {
             try {
-                val records = Datasource.loadMySetsRecords(account)
+                val records = Datasource.loadSetsRecords(account,true)
                 setsRecordLiveData.postValue(records)
 
             } catch (ex: ApiException) {

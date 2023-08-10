@@ -25,32 +25,20 @@ import java.util.TimerTask
 object Datasource {
     private val client: OkHttpClient = ApiSetUp.createOkHttpClient()
     private val apiBuilder: ApiV1 = ApiSetUp.createRetrofit(client)
-    private val setsRecordsCache = Cache<List<SetsRecord>>()
-    private val timeRecordsCache = Cache<List<TimesRecord>>()
+    private val setsRecordsCache = ExpirableCache<List<SetsRecord>>()
+    private val timeRecordsCache = ExpirableCache<List<TimesRecord>>()
     private val timer = Timer()
 
-    private fun setSetsRecordTimer(account: String){
+
+    private fun setRecordTimer(account: String, isSetsRecord: Boolean) {
         val clearCacheTask = object : TimerTask() {
             override fun run() {
-                GlobalScope.launch{
-                    setsRecordsCache.setCache(loadSetsRecords(account))
-                }
-            }
-        }
-
-        // 设定五分钟后清除缓存
-        val delay = 5 * 60 * 1000L // 5 分钟延迟，单位是毫秒
-        val period = 5 * 60 * 1000L // 每隔 5 分钟执行一次，单位是毫秒
-
-        // 首次清除缓存的定时任务
-        timer.schedule(clearCacheTask, delay, period)
-    }
-
-    private fun setTimeRecordTimer(account: String){
-        val clearCacheTask = object : TimerTask() {
-            override fun run() {
-                GlobalScope.launch{
-                    timeRecordsCache.setCache(loadTimesRecords(account))
+                GlobalScope.launch {
+                    if (isSetsRecord) {
+                        setsRecordsCache.setCache(loadSetsRecords(account, true),5*60*1000)
+                    } else {
+                        timeRecordsCache.setCache(loadTimesRecords(account, true),5*60*1000)
+                    }
                 }
             }
         }
@@ -64,101 +52,71 @@ object Datasource {
     }
 
     @Throws(ApiException::class)
-    suspend fun loadMySetsRecords(account: String): List<SetsRecord> {
-        val records = setsRecordsCache.getContent()
-        if (records == null) {
-            val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
-                { response ->
-                    val body = response.body()
-                    if (response.isSuccessful) {
-                        setSetsRecordTimer(account)
-                        //API回傳結果
-                        if (body == null) {
-                            setsRecordsCache.setCache(listOf())
-                            Result.success(listOf())
-                        } else {
-                            setsRecordsCache.setCache(body)
-                            Result.success(body)
-                        }
-                    } else {
-                        Result.failure(ApiException.Read)
-                        // 處理 API 錯誤回應
+    suspend fun loadSetsRecords(account: String, isMyRecord: Boolean = false): List<SetsRecord> {
+        val setTimerAndCache: (account: String, body: List<SetsRecord>) -> Unit =
+            { myAccount, body ->
+                setRecordTimer(myAccount, true)
+                setsRecordsCache.setCache(body)
+            }
+        val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
+            { response ->
+                val body = response.body() ?: listOf()
+
+                if (response.isSuccessful) {
+                    if (isMyRecord) {
+                        setTimerAndCache(account, body)
                     }
+                    Result.success(body)
+                } else {
+                    Result.failure(ApiException.Read)
                 }
-            return callApi({ apiBuilder.getSetsRecords(account) }, action)
+            }
+
+        return if (isMyRecord) {
+            setsRecordsCache.getContent() ?: callApi(
+                { apiBuilder.getSetsRecords(account) },
+                action
+            )
         } else {
-            return records
+            callApi(
+                { apiBuilder.getSetsRecords(account) },
+                action
+            )
         }
     }
 
     @Throws(ApiException::class)
-    suspend fun loadSetsRecords(account: String): List<SetsRecord> {
-            val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
-                { response ->
-                    val body = response.body()
-                    if (response.isSuccessful) {
-                        //API回傳結果
-                        if (body == null) {
-                            Result.success(listOf())
-                        } else {
-                            Result.success(body)
-                        }
-                    } else {
-                        Result.failure(ApiException.Read)
-                        // 處理 API 錯誤回應
+    suspend fun loadTimesRecords(account: String, isMyRecord: Boolean = false): List<TimesRecord> {
+        val setTimerAndCache: (account: String, body: List<TimesRecord>) -> Unit =
+            { myAccount, body ->
+                setRecordTimer(myAccount, false)
+                timeRecordsCache.setCache(body)
+            }
+        val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
+            { response ->
+                val body = response.body() ?: listOf()
+                if (response.isSuccessful) {
+                    if (isMyRecord) {
+                        setTimerAndCache(account, body)
                     }
+                    Result.success(body)
+                } else {
+                    Result.failure(ApiException.Read)
                 }
-            return callApi({ apiBuilder.getSetsRecords(account) }, action)
-    }
+            }
 
-    @Throws(ApiException::class)
-    suspend fun loadMyTimesRecords(account: String): List<TimesRecord> {
-        val records = timeRecordsCache.getContent()
-        if (records == null) {
-            val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
-                { response ->
-                    val body = response.body()
-                    if (response.isSuccessful) {
-                        setTimeRecordTimer(account)
-                        if (body == null) {
-                            timeRecordsCache.setCache(listOf())
-                            Result.success(listOf())
-                        } else {
-                            timeRecordsCache.setCache(body)
-                            Result.success(body)
-                        }
-
-                    } else {
-                        Result.failure(ApiException.Read)
-                        // 處理 API 錯誤回應
-                    }
-                }
-            return callApi({ apiBuilder.getTimesRecords(account) }, action)
+        return if (isMyRecord) {
+            timeRecordsCache.getContent() ?: callApi(
+                { apiBuilder.getTimesRecords(account) },
+                action
+            )
         } else {
-            return records
-
+            callApi(
+                { apiBuilder.getTimesRecords(account) },
+                action
+            )
         }
     }
-
-    @Throws(ApiException::class)
-    suspend fun loadTimesRecords(account: String): List<TimesRecord> {
-            val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
-                { response ->
-                    val body = response.body()
-                    if (response.isSuccessful) {
-                        if (body == null) {
-                            Result.success(listOf())
-                        } else {
-                            Result.success(body)
-                        }
-
-                    } else {
-                        Result.failure(ApiException.Read)
-                        // 處理 API 錯誤回應
-                    }
-                }
-            return callApi({ apiBuilder.getTimesRecords(account) }, action)
-        }
 
     @Throws(ApiException::class)
     suspend fun register(user: User): Int {
@@ -254,8 +212,6 @@ object Datasource {
             }
         })
     }
-
-
 
 
     suspend fun recommendTimesRecords(user_id: Int): List<TimesRecord> {
