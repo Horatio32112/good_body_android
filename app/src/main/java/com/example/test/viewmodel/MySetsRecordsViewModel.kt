@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.test.api.ApiException
-import com.example.test.data.Datasource
 import com.example.test.model.SetsRecord
+import com.example.test.repository.RecordRepository
 import kotlinx.coroutines.launch
 
 class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
@@ -15,7 +15,7 @@ class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
     fun loadSetsRecords(account:String) {
         viewModelScope.launch {
             try {
-                val records = Datasource.loadSetsRecords(account,true)
+                val records = RecordRepository().loadSetsRecords(account,true)
                 setsRecordLiveData.postValue(records)
 
             } catch (ex: ApiException) {
@@ -28,7 +28,7 @@ class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
         super.updateRecord(record)
         viewModelScope.launch {
             try {
-                Datasource.updateSetsRecords(record)
+                RecordRepository().updateSetsRecords(record)
                 msgLiveData.postValue("update success")
 
             } catch (ex: ApiException) {
@@ -36,4 +36,5 @@ class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
             }
         }
     }
+
 }
