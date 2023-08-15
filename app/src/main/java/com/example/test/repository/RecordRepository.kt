@@ -52,7 +52,7 @@ object RecordRepository {
                     Log.d("header ", "$body")
 
                 }
-            setsRecordsCache.getContent() ?: Datasource.loadSetsRecords(account, setTimerAndCache)
+            setsRecordsCache.getContents() ?: Datasource.loadSetsRecords(account, setTimerAndCache)
 
         } else {
             Datasource.loadSetsRecords(account)
@@ -67,7 +67,7 @@ object RecordRepository {
                     setRecordTimer(myAccount, false)
                     Log.d("header ", "$body")
                 }
-            timeRecordsCache.getContent() ?: Datasource.loadTimesRecords(account, setTimerAndCache)
+            timeRecordsCache.getContents() ?: Datasource.loadTimesRecords(account, setTimerAndCache)
 
         } else {
             Datasource.loadTimesRecords(account)

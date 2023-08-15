@@ -4,18 +4,9 @@ import android.util.Log
 import java.util.Timer
 import java.util.TimerTask
 
-class ExpirableCache<T> : Cache<T>() {
-    private var content: T? = null
-    private var hasExpired = true
+class ExpirableCache<T>(content:T?=null,hasExpired:Boolean=true) : Cache<T>(content, hasExpired) {
     private var timer = Timer()
 
-    override fun getContent():T?{
-        return if(hasExpired){
-            null
-        }else{
-            content
-        }
-    }
 
     fun setCache(cacheContent: T, delaySpan: Long) {
         content = cacheContent
@@ -32,8 +23,4 @@ class ExpirableCache<T> : Cache<T>() {
         timer.schedule(clearCacheTask, delaySpan)
     }
 
-    override fun expire(){
-        Log.d("header ", "cache expired")
-        hasExpired=true
-    }
 }
