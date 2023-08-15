@@ -15,7 +15,7 @@ class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
     fun loadSetsRecords(account:String) {
         viewModelScope.launch {
             try {
-                val records = RecordRepository().loadSetsRecords(account,true)
+                val records = RecordRepository.loadSetsRecords(account,true)
                 setsRecordLiveData.postValue(records)
 
             } catch (ex: ApiException) {
@@ -28,7 +28,7 @@ class MySetsRecordsViewModel : ViewModel() , RecordViewModel{
         super.updateRecord(record)
         viewModelScope.launch {
             try {
-                RecordRepository().updateSetsRecords(record)
+                RecordRepository.updateSetsRecords(record)
                 msgLiveData.postValue("update success")
 
             } catch (ex: ApiException) {

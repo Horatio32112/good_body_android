@@ -14,7 +14,7 @@ class AddSetsRecordsViewModel : ViewModel() {
     fun createSetsRecords(userId: Int, content: String, sets: Int, reps: Int, weight: Float) {
         viewModelScope.launch {
             try {
-                RecordRepository().createSetsRecords(userId, content, sets, reps, weight)
+                RecordRepository.createSetsRecords(userId, content, sets, reps, weight)
                 msgLiveData.postValue("success")
 
             } catch (ex: ApiException) {

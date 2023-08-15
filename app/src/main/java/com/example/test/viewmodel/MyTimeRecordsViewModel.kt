@@ -15,7 +15,7 @@ class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
     fun loadTimesRecords(account: String) {
         viewModelScope.launch {
             try {
-                val records = RecordRepository().loadTimesRecords(account,true)
+                val records = RecordRepository.loadTimesRecords(account,true)
                 timeRecordLiveData.postValue(records)
 
             } catch (ex: ApiException) {
@@ -28,7 +28,7 @@ class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
         super.updateRecord(record)
         viewModelScope.launch {
             try {
-                RecordRepository().updateTimeRecords(record)
+                RecordRepository.updateTimeRecords(record)
                 msgLiveData.postValue("update success")
 
             } catch (ex: ApiException) {

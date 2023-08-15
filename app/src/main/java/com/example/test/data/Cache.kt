@@ -1,9 +1,11 @@
 package com.example.test.data
 
+import android.util.Log
+
 open class Cache<T>{
     private var content:T?=null
     private var hasExpired = true
-    fun getContent():T?{
+    open fun getContent():T?{
         return if(hasExpired){
             null
         }else{
@@ -16,7 +18,8 @@ open class Cache<T>{
         hasExpired = false
     }
 
-    fun expire(){
+    open fun expire(){
+        Log.d("header ", "cache expired")
         hasExpired=true
     }
 

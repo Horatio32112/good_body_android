@@ -14,7 +14,7 @@ class AddTimeRecordsViewModel : ViewModel() {
     fun createTimeRecords(userId: Int, content: String, duration: Int, distance: Float) {
         viewModelScope.launch {
             try {
-                RecordRepository().createTimeRecords(userId, content, duration, distance)
+                RecordRepository.createTimeRecords(userId, content, duration, distance)
                 msgLiveData.postValue("success")
 
             } catch (ex: ApiException) {
