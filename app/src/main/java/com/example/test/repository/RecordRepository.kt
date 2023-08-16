@@ -1,8 +1,9 @@
 package com.example.test.repository
 
 import android.util.Log
+import com.example.test.api.ApiException
+import com.example.test.data.AutoExpireCache
 import com.example.test.data.Datasource
-import com.example.test.data.ExpirableCache
 import com.example.test.model.SetsRecord
 import com.example.test.model.TimesRecord
 import kotlinx.coroutines.GlobalScope
@@ -11,8 +12,8 @@ import java.util.Timer
 import java.util.TimerTask
 
 object RecordRepository {
-    private val setsRecordsCache = ExpirableCache<List<SetsRecord>>()
-    private val timeRecordsCache = ExpirableCache<List<TimesRecord>>()
+    private val setsRecordsCache = AutoExpireCache<List<SetsRecord>>()
+    private val timeRecordsCache = AutoExpireCache<List<TimesRecord>>()
     private val timer = Timer()
 
 
@@ -21,12 +22,12 @@ object RecordRepository {
             override fun run() {
                 GlobalScope.launch {
                     if (isSetsRecord) {
-                        setsRecordsCache.setCache(
+                        setsRecordsCache.setAutoExpireCache(
                             Datasource.loadSetsRecords(account),
                             5 * 60 * 1000
                         )
                     } else {
-                        timeRecordsCache.setCache(
+                        timeRecordsCache.setAutoExpireCache(
                             Datasource.loadTimesRecords(account),
                             5 * 60 * 1000
                         )
@@ -43,17 +44,18 @@ object RecordRepository {
         timer.schedule(clearCacheTask, delay, period)
     }
 
+    @Throws(ApiException::class)
     suspend fun loadSetsRecords(account: String, isMyRecord: Boolean): List<SetsRecord> {
         return if (isMyRecord) {
-            val setTimerAndCache: (account: String, body: List<SetsRecord>) -> Unit =
-                { myAccount, body ->
-                    setsRecordsCache.setCache(body, 5 * 60 * 1000)
-                    setRecordTimer(myAccount, true)
-                    Log.d("header ", "$body")
-
-                }
-            setsRecordsCache.getContents() ?: Datasource.loadSetsRecords(account, setTimerAndCache)
-
+            setsRecordsCache.getContents() ?: try {
+                val list = Datasource.loadSetsRecords(account)
+                setsRecordsCache.setAutoExpireCache(list, 5 * 60 * 1000)
+                setRecordTimer(account, true)
+                Log.d("header ", "$list")
+                list
+            } catch (ex: ApiException) {
+                throw ex
+            }
         } else {
             Datasource.loadSetsRecords(account)
         }
@@ -61,14 +63,15 @@ object RecordRepository {
 
     suspend fun loadTimesRecords(account: String, isMyRecord: Boolean): List<TimesRecord> {
         return if (isMyRecord) {
-            val setTimerAndCache: (account: String, body: List<TimesRecord>) -> Unit =
-                { myAccount, body ->
-                    timeRecordsCache.setCache(body, 5 * 60 * 1000)
-                    setRecordTimer(myAccount, false)
-                    Log.d("header ", "$body")
-                }
-            timeRecordsCache.getContents() ?: Datasource.loadTimesRecords(account, setTimerAndCache)
-
+            timeRecordsCache.getContents() ?: try {
+                val list = Datasource.loadTimesRecords(account)
+                timeRecordsCache.setAutoExpireCache(list, 5 * 60 * 1000)
+                setRecordTimer(account, false)
+                Log.d("header ", "$list")
+                list
+            } catch (ex: ApiException) {
+                throw ex
+            }
         } else {
             Datasource.loadTimesRecords(account)
         }

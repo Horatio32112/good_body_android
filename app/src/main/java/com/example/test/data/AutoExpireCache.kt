@@ -4,13 +4,11 @@ import android.util.Log
 import java.util.Timer
 import java.util.TimerTask
 
-class ExpirableCache<T>(content:T?=null,hasExpired:Boolean=true) : Cache<T>(content, hasExpired) {
+class AutoExpireCache<T> : Cache<T>() {
     private var timer = Timer()
 
-
-    fun setCache(cacheContent: T, delaySpan: Long) {
-        content = cacheContent
-        hasExpired = false
+    fun setAutoExpireCache(cacheContent: T, delaySpan: Long) {
+        setCache(cacheContent)
         Log.d("header ", "cache set with content=$content")
 
         timer.cancel() // 取消之前的定时任务
@@ -22,5 +20,4 @@ class ExpirableCache<T>(content:T?=null,hasExpired:Boolean=true) : Cache<T>(cont
         }
         timer.schedule(clearCacheTask, delaySpan)
     }
-
 }

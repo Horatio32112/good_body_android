@@ -2,11 +2,9 @@ package com.example.test.data
 
 import android.util.Log
 
-open class Cache<T>(
-    var content: T? = null,
-    var hasExpired: Boolean = true
-) {
-
+open class Cache<T> {
+    protected var content: T? = null
+    private var hasExpired: Boolean = true
     fun getContents(): T? {
         return if (hasExpired) {
             null
@@ -15,7 +13,7 @@ open class Cache<T>(
         }
     }
 
-    open fun setCache(objects: T) {
+    fun setCache(objects: T) {
         content = objects
         hasExpired = false
     }
@@ -28,6 +26,4 @@ open class Cache<T>(
     fun hasExpired(): Boolean {
         return hasExpired
     }
-
-
 }

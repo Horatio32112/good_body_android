@@ -24,13 +24,12 @@ object Datasource {
 
 
     @Throws(ApiException::class)
-    suspend fun loadSetsRecords(account: String,setTimerAndCache:(account: String, body: List<SetsRecord>) -> Unit ={ _, _ ->}): List<SetsRecord> {
+    suspend fun loadSetsRecords(account: String): List<SetsRecord> {
 
         val action: (response: Response<List<SetsRecord>>) -> Result<List<SetsRecord>> =
             { response ->
                 val body = response.body() ?: listOf()
                 if (response.isSuccessful) {
-                    setTimerAndCache(account, body)
                     Result.success(body)
                 } else {
                     Result.failure(ApiException.Read)
@@ -44,13 +43,12 @@ object Datasource {
     }
 
     @Throws(ApiException::class)
-    suspend fun loadTimesRecords(account: String,setTimerAndCache:(account: String, body: List<TimesRecord>) -> Unit ={ _, _ ->}): List<TimesRecord> {
+    suspend fun loadTimesRecords(account: String): List<TimesRecord> {
 
         val action: (response: Response<List<TimesRecord>>) -> Result<List<TimesRecord>> =
             { response ->
                 val body = response.body() ?: listOf()
                 if (response.isSuccessful) {
-                    setTimerAndCache(account, body)
                     Result.success(body)
                 } else {
                     Result.failure(ApiException.Read)
@@ -249,7 +247,7 @@ object Datasource {
 
     suspend fun updateSetsRecords(
         record: SetsRecord,
-        action:() -> Unit ={}
+        action: () -> Unit = {}
     ) {
 
         val check: (response: Response<OperationMsg>) -> Result<Unit> =
@@ -280,7 +278,7 @@ object Datasource {
 
     suspend fun updateTimeRecords(
         record: TimesRecord,
-        action:() -> Unit ={}
+        action: () -> Unit = {}
     ) {
 
         val check: (response: Response<OperationMsg>) -> Result<Unit> =
@@ -309,7 +307,7 @@ object Datasource {
     }
 
     suspend fun createTimeRecords(
-        userId: Int, content: String, duration: Int, distance: Float,action:() -> Unit ={}
+        userId: Int, content: String, duration: Int, distance: Float, action: () -> Unit = {}
     ) {
 
         val check: (response: Response<OperationMsg>) -> Result<Unit> =
@@ -331,7 +329,7 @@ object Datasource {
     }
 
     suspend fun createSetsRecords(
-        userId: Int, content: String, sets: Int, reps: Int, weight: Float,action:() -> Unit ={}
+        userId: Int, content: String, sets: Int, reps: Int, weight: Float, action: () -> Unit = {}
     ) {
 
         val check: (response: Response<OperationMsg>) -> Result<Unit> =
