@@ -7,9 +7,11 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.example.test.R
 import com.example.test.api.ApiException
 import com.example.test.data.Datasource
@@ -23,15 +25,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val goToRegisterPageButton: Button = findViewById(R.id.to_register_button)
         val loginButton: Button = findViewById(R.id.login_button)
-        val button: Button = findViewById(R.id.button2)
         val accountInput: EditText = findViewById(R.id.register_account_input_field)
         val passwordInput: EditText = findViewById(R.id.register_password_input_field)
-
-
-        button.setOnClickListener {
-            val context = button.context
-            val intent = Intent(context, HomeActivity::class.java)
-            context.startActivity(intent)
+        val img = findViewById<ImageView>(R.id.imageView)
+        img.load("https://i.kym-cdn.com/photos/images/original/000/920/638/05d.png") {
+            // placeholder image is the image used
+            // when our image url fails to load.
+            placeholder(R.drawable.ic_launcher_background)
         }
 
         goToRegisterPageButton.setOnClickListener {
