@@ -1,28 +1,29 @@
 package com.example.test.data
 
-open class Cache<T>{
-    private var content:T?=null
-    private var hasExpired = true
-    fun getContent():T?{
-        return if(hasExpired){
+import android.util.Log
+
+open class Cache<T> {
+    protected var content: T? = null
+    private var hasExpired: Boolean = true
+    fun getContents(): T? {
+        return if (hasExpired) {
             null
-        }else{
+        } else {
             content
         }
     }
 
-    open fun setCache(objects: T){
-        content=objects
+    fun setCache(objects: T) {
+        content = objects
         hasExpired = false
     }
 
-    fun expire(){
-        hasExpired=true
+    fun expire() {
+        Log.d("header ", "cache expired")
+        hasExpired = true
     }
 
-    fun hasExpired():Boolean{
+    fun hasExpired(): Boolean {
         return hasExpired
     }
-
-
 }

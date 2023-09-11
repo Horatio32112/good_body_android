@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.test.api.ApiException
-import com.example.test.data.Datasource
 import com.example.test.model.TimesRecord
+import com.example.test.repository.RecordRepository
 import kotlinx.coroutines.launch
 
 class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
@@ -15,7 +15,7 @@ class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
     fun loadTimesRecords(account: String) {
         viewModelScope.launch {
             try {
-                val records = Datasource.loadTimesRecords(account,true)
+                val records = RecordRepository.loadTimesRecords(account,true)
                 timeRecordLiveData.postValue(records)
 
             } catch (ex: ApiException) {
@@ -28,7 +28,7 @@ class MyTimeRecordsViewModel : ViewModel(), RecordViewModel {
         super.updateRecord(record)
         viewModelScope.launch {
             try {
-                Datasource.updateTimeRecords(record)
+                RecordRepository.updateTimeRecords(record)
                 msgLiveData.postValue("update success")
 
             } catch (ex: ApiException) {
